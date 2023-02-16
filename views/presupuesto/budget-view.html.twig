@@ -1,0 +1,78 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Presupuesto{% endblock %}
+{% block stylesheets %}
+    <link href="{{ dir }}/assets/css/pages/print.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block row %}
+
+    <div id="contenedor" class="container">
+
+        <div class="row title-nmb-budegt">
+            <div class="col-xs-12" style="margin-botton:0 !important"><h3 class="budget-number">PRESUPUESTO #{{ budget.numero }}</h3></div> 
+            <div class="col-xs-12 text-right"><h4>Asunción, {{ budget.fecha|date("d-m-Y") }}</h4></div>
+            <div class="col-xs-12"><h4 class="text-capitalize">{{ budget.sustantivo }} {{ budget.cliente|lower }}</h4></div> 
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h5 class="text-justify" style="text-indent: 40px;">Me dirijo a Ud. Con el objeto de presentar presupuesto solicitado, a continuación 
+                ponemos a su consideración nuestra mejor cotización sobre lo siguiente.</h5>
+            </div> 
+
+            <div class="col-xs-12">
+                <div class="table-responsive">
+                    <table id="tabla-factura" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th class="th-bg">ITEM</th>
+                            <th class="th-bg">CANTIDAD</th>
+                            <th class="th-bg">PRODUCTO</th>
+                            <th class="th-bg">COSTO</th>
+                            <th class="th-bg">TOTAL</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-detalle">
+                        {% for key, dato in detailBudget %}
+                            <tr>
+                                <td class="item">{{ key+1 }}</td>
+                                <td>{{ dato.cantidad }}</td>
+                                <td>{{ dato.producto|upper }}</td>
+                                <td>{{ dato.costo|number_format(0, ',', '.') }}</td>
+                                <td>{{ (dato.cantidad*dato.costo)|number_format(0, ',', '.') }} </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Total</th>
+                                <th>{{ total.total|number_format(0, ',', '.') }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div> 
+
+            <div class="col-xs-12">
+                <h5 class="text-justify" style="text-indent: 40px;">En espera de la aceptación de lo presupuestado por la Empresa, me despido muy atentamente.</h5>
+            </div> 
+
+             <div class="col-xs-12">
+                <h5 class="text-right">HILARIO SANCHEZ VARGAS</h5>
+            </div> 
+            
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/library/print-this/jQuery.print.min.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(16)').addClass('active');
+        $('.cabecera').remove();
+    </script>
+{% endblock %}

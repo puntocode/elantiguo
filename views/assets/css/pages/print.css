@@ -1,0 +1,31 @@
+#contenedor .logo-img {
+  width: 150px;
+  margin-top: 0;
+}
+#contenedor .lista-info {
+  border-bottom: 1px solid #b5b5b5;
+}
+#contenedor .lista-info ul {
+  list-style: none;
+  margin-bottom: 5px;
+}
+#contenedor .title-nmb-budegt [class*="col-"] {
+  margin-bottom: 0 !important;
+}
+#contenedor .th-bg {
+  background-color: #001432 !important;
+  color: #fff !important;
+}
+#contenedor .table-detalle {
+  border-bottom: 2px solid #001432;
+}
+@media print {
+  .budget-number {
+    color: #083270 !important;
+    -webkit-print-color-adjust: exact;
+  }
+  .item {
+    color: gray!important;
+    -webkit-print-color-adjust: exact;
+  }
+}

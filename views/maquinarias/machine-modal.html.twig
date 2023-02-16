@@ -1,0 +1,118 @@
+<button class="btn btn-primary" data-toggle="modal" data-target="#new-product">NUEVA MAQUINARIA</button>
+<!-- Modal Insertar Usuarios-->
+<div class="modal fade" id="new-product" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="fa fa-wrench"></i> Agregar Maquinaria</h4>
+            </div>
+            <form class="form-horizontal" name="insert-prodcut" method="post" action="{{ urlFor('insert-product') }}"  data-toggle="validator">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Categoria</label>
+                        <div class="col-sm-10">
+                            <select id="sl-category" name="category" class="form-control" required>
+                                {% for entity in categoria %}
+                                    <option value="{{ entity.idcategoria }}">{{ entity.categoria | upper }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Producto</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="product" class="form-control"  required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Valor de Venta</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="cost" class="form-control moneda" placeholder="Valor en Gs." autocomplete="off" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> INSERTAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Modificar Productos-->
+<div class="modal fade" id="modal-update-product" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="fa fa-wrench"></i> Actualizar Maquinaria</h4>
+            </div>
+            <form class="form-horizontal" name="update-prodcut" method="post" action="{{ urlFor('update-product') }}" data-toggle="validator">
+                <input id="up-id-product" type="hidden" name="up-id-product" required />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Categoria</label>
+                        <div class="col-sm-10">
+                                <select name="up-category" class="form-control" required>
+                                    {% for entity in categoria %}
+                                        <option value="{{ entity.idcategoria }}">{{ entity.categoria | upper }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Producto</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="up-product" class="form-control" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Valor de Venta</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="up-cost" class="form-control moneda" placeholder="Valor en Gs." autocomplete="off" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> ACTUALIZAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Modificar Imagen-->
+<div class="modal fade" id="modal-up-image" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="fa fa-picture-o"></i> Agregar Imagen</h4>
+            </div>
+            <form class="form-horizontal" name="insert-prodcut" method="post" action="{{ urlFor('update-img-product') }}"  enctype="multipart/form-data" data-toggle="validator">
+                <div class="modal-body">
+                    <input type="hidden" name="up-id-product-img" required />
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Imagen</label>
+                        <div class="col-sm-10">
+                            <input id="imagen" name="image" class="form-control"  size="30" type="file" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> ACTUALIZAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Alertas -->
+{% if flash['mensaje'] %}
+    <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+        <span>{{ flash['mensaje'] }}</span>
+    </div>
+{% endif %}

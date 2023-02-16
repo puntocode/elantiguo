@@ -1,0 +1,61 @@
+{% set dir= baseUrl ~ "/views" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf8mb4">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="{{ dir }}/assets/images/favicon.png"/>
+    <title>{% block title %}Titulo{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/bootstrap.min.css" />
+    {#<link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/font-awesome.min.css" />#}
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/animate.min.css" />
+    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/flat-blue.css" />
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/estilo.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/main.css" />
+</head>
+<body class="flat-blue">
+<div id="app" class="app-container">
+    <div class="row content-container">
+        {% include '/include/menu.html.twig' %}
+
+        <!-- Main Content -->
+        <div class="container-fluid">
+            <div class="side-body">
+                <div class="row cabecera">
+                    <div  class="col-xs-7 col-sm-6 col-md-6 col-lg-6 ">
+                        <div class="page-title">
+                            <span class="title"><h2>{% block titleDash %}{% endblock %}</h2></span>
+                            <div class="description">{% block infoDash %}{% endblock %}</div>
+                        </div>
+                    </div>
+                    <div class="col-xs-5 col-sm-6 col-md-6 col-lg-6">
+                        <div class="pull-right btn-nuevo">
+                            <!-- BT nuevo y buscador -->
+                            {% block nuevo %}{% endblock %}
+                        </div>
+                    </div>
+                </div>
+                {% block row %}{% endblock %}
+
+                <!-- Tabla -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        {% block tabla %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script type="text/javascript" src="{{ dir }}/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/dashboard.js"></script>
+    {% block javascripts %}{% endblock %}
+
+</body>
+</html>

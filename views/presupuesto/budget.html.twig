@@ -1,0 +1,174 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Presupuestos{% endblock %}
+
+{% block titleDash %}Presupuestos{% endblock %}
+{% block infoDash %}Envios de Presupuestos{% endblock %}
+
+{% block nuevo %}
+    <a class="btn btn-primary" href="" data-toggle="modal" data-target="#modal-new-budget"><i class="fa fa-file-o"></i> NUEVO PRESUPUESTO</a>
+    <a class="btn btn-success" href="{{ urlFor('budget-accept') }}">ACEPTADOS</a>
+    <a class="btn btn-danger" href="{{ urlFor('budget-rejected') }}">RECHAZADO</a>
+{% endblock %}
+
+
+{% block tabla %}
+    <div class="egress card filterable">
+        <div class="card-header filterable" style="background-color:#FABE28">
+            <div class="card-title">
+                <h4 class="title color-black"><i class="fa fa-file-text"></i> PRESUPUESTOS PENDIENTES</h4>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="fa fa-filter"></span> Filtro</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="filters">
+                        <th><input type="text" placeholder="NRO." disabled></th>
+                        <th>FECHA</th>
+                        <th><input type="text" placeholder="CLIENTE" disabled></th>
+                        <th>DESCRIPCION</th>
+                        <th class="text-center">EDIT / PRINT</th>
+                        <th class="text-center">ACEP / RECH</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in budget %}
+                        <tr>
+                            <td>{{ dato.numero }}</td>
+                            <td class="fecha-factura">{{ dato.fecha|date("d-m-Y") }}</td>
+                            <td class="provider">{{ dato.cliente|upper }}</td>
+                            <td>{{ dato.descripcion|lower }} </td>
+                            <td class="text-center acciones">
+                                <ul>
+                                    <li><a href="{{ urlFor('budget-detail',{id:dato.idpresupuesto}) }}" ><i class="fa fa-pencil-square-o"></i></a></li>
+                                    <li><a href="{{ urlFor('budget-print', {id:dato.idpresupuesto}) }}"><i class="fa fa-print"></i></a></li>
+                                </ul>
+                            </td>
+                            <td class="text-center acciones">
+                                <ul>
+                                    <li><a href="#" data-href="{{ urlFor('update-state-budget', {id:dato.idpresupuesto,estado:1}) }}" data-toggle="modal" data-target="#confirm-accept"><i class="fa fa-check" style="color:#5CB85C"></i></a></li>
+                                    <li><a href="#" data-href="{{ urlFor('update-state-budget', {id:dato.idpresupuesto,estado:2}) }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-times delete"></i></a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal RECHAZAR PRESUPUESTO-->
+    <div class="modal fade modal-danger" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="myModalLabel">Desea rechazar este Presupuesto?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a class="btn btn-danger btn-ok">SI</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ACEPTAR PRESUPUESTO -->
+    <div class="modal fade modal-success" id="confirm-accept" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="myModalLabel">ACEPTAR PRESUPUESTO</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a class="btn btn-success btn-ok">SI</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal New Budget -->
+    <div class="modal fade" id="modal-new-budget" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-file-o"></i> Nuevo Presupuesto</h4>
+                </div>
+                <form class="form-horizontal" name="insert-budget" method="post" action="{{ urlFor('insert-budget') }}"  data-toggle="validator">
+                    <div class="modal-body">
+                        <div class="form-group">
+
+                            <label for="title" class="col-sm-2 control-label">Cliente</label>
+                            <div class="col-sm-3">
+                                <select class="form-control custom-select" name="select-noun">
+                                    <option value="Señor: " selected>Señor</option>
+                                    <option value="Señora: ">Señora</option>
+                                    <option value="Señorita: ">Señorita</option>
+                                    <option value="Señores: ">Señores</option>
+                                    <option value="Señoras: ">Señoras</option>
+                                    <option value="Ing.: ">Ing.</option>
+                                    <option value="Lic.: ">Lic.</option>
+                                    <option value="Dr.: ">Dr.</option>
+                                    <option value="Dra.: ">Dra.</option>
+                                    <option value="Abg.: ">Abg.</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-7">
+                               <input list="list-customer" name="input-customer" class="form-control upper" required title="Clientes" >
+                                <datalist id="list-customer">
+                                    {% for entity in customer %}
+                                        <option value="{{ entity.cliente|upper }}"></option>
+                                    {% endfor %}
+                                </datalist>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Fecha</label>
+                            <div class="col-sm-10">
+                                <input type="date" name="input-date"  class="form-control" value="{{ now|date('Y-m-d') }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Descripción</label>
+                            <div class="col-sm-10">
+                              <textarea class="form-control rounded-0" id="text-area-description" name="text-area-description" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> INSERTAR</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Alertas -->
+    {% if flash['mensaje'] %}
+        <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+            <span>{{ flash['mensaje'] }}</span>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/delete.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(16)').addClass('active');
+
+        $('#confirm-accept').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+            var id =  $(this).find('.btn-ok').attr('href');
+        });
+    </script>
+{% endblock %}

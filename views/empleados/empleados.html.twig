@@ -1,0 +1,131 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Empleados{% endblock %}
+
+{% block titleDash %}Empleados{% endblock %}
+{% block infoDash %}Lista de Empleados de la empresa{% endblock %}
+
+{% block nuevo %}
+    <button class="btn btn-primary" data-toggle="modal" data-target="#new-prod">NUEVO EMPLEADO</button>
+    <!-- Modal Insertar Usuarios-->
+    <div class="modal fade" id="new-prod" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-address-book-o"></i> Agregar Empleado</h4>
+                </div>
+                <form class="form-horizontal" name="insert-user" method="post" action="{{ urlFor('insert-empleado') }}" data-toggle="validator">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Nombre</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="nombre" class="form-control upper" placeholder="HILARIO SANCHEZ" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Documento</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="ci" class="form-control" placeholder="Nro de Cedula" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Nacimiento</label>
+                            <div class="col-sm-10">
+                                <input type="date" name="nacimiento" class="form-control" placeholder="01-01-1980" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Celular</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="telefono" class="form-control upper" placeholder="099x000000" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" name="email" class="form-control" placeholder="email@elantiguo.com" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Ciudad</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="ciudad" class="form-control upper" autocomplete="off" placeholder="ASUNCION" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Sueldo</label>
+                            <div class="col-sm-10">
+                                <input type="number"  name="sueldo" class="form-control" autocomplete="off" placeholder="100000" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"><i class="fa fa-address-book-o"></i></span> INSERTAR</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include '/include/alert.html.twig' %}
+
+{% endblock %}
+
+
+{% block tabla %}
+    <div class="card filterable">
+        <div class="card-header">
+            <div class="card-title">
+                <h4 class="title">Tabla de Empleados</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>NOMBRE</th>
+                        <th>DOCUMENTO</th>
+                        <th>CELULAR</th>
+                        <th>EMAIL</th>
+                        <th>CIUDAD</th>
+                        <th>SUELDO</th>
+                        <th><center>ACCIONES</center></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in empleado %}
+                        <tr>
+                            <td>{{ dato.idempleado }}</td>
+                            <td>{{ dato.nombre | upper }}</td>
+                            <td>{{ dato.ci |number_format }}</td>
+                            <td>{{ dato.telefono }} </td>
+                            <td>{{ dato.email }} </td>
+                            <td>{{ dato.ciudad | upper }} </td>
+                            <td>{{ dato.sueldo |number_format }} </td>
+                            <td class="acciones"><center>
+                                <ul>
+                                    <li>
+                                        <a href="{{ urlFor('up-empleado', {'id':dato.idempleado}) }}"><i class="fa fa-pencil-square-o"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" data-href="" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o delete" style="color: red"></i></a>
+                                    </li>
+                                </ul></center>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.side-menu li:eq(19)').addClass('active');
+        $('.side-menu li:eq(23)').addClass('active2');    </script>
+{% endblock %}

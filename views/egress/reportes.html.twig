@@ -1,0 +1,112 @@
+{% extends '/base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/dataTables.bootstrap.min.css" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/buttons.dataTables.min.css" />
+{% endblock %}
+
+
+{% block title %}Facturas de Gastos{% endblock %}
+
+{% block titleDash %}Reportes{% endblock %}
+{% block infoDash %}Reportes de las facturas de salida y gastos de la empresa{% endblock %}
+
+{% block nuevo %}
+    <button class="btn btn-primary" data-toggle="modal" data-target="#search-facture">BUSQUEDA</button>
+    <!-- Modal Insertar Usuarios-->
+    <div class="modal fade" id="search-facture" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-search"></i> Reporte Facturas</h4>
+                </div>
+                <form class="form-horizontal" name="insert-user" method="post" action="{{ urlFor('search-egress') }}" data-toggle="validator">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Desde</label>
+                            <div class="col-sm-10">
+                                <input type="date" name="desde"  class="form-control"  required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Hasta</label>
+                            <div class="col-sm-10">
+                                <input type="date" name="hasta"  class="form-control"  required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"><i class="fa fa-search"></i></span> BUSCAR</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% include '/include/alert.html.twig' %}
+
+{% endblock %}
+
+
+{% block tabla %}
+    <div class="card filterable">
+        <div class="card-header">
+            <div class="card-title col-sm-6">
+                <h4 class="title">REPORTE FACTURAS DE GASTOS</h4>
+            </div>
+            <div class="card-title egress col-sm-6">
+                <h4 class="text-right" style="color: #FA2A00">TOTAL: {{ total.total|number_format(0, ',', '.') }} Gs.</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="datatable table table-striped" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>FECHA</th>
+                    <th>NRO. FACTURA</th>
+                    <th>PROVEEDOR</th>
+                    <th>GASTO</th>
+                    <th>IVA</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>FECHA</th>
+                    <th>NRO. FACTURA</th>
+                    <th>PROVEEDOR</th>
+                    <th>GASTO</th>
+                    <th>IVA</th>
+                </tr>
+                </tfoot>
+                <tbody>
+                {% for dato in egress %}
+                    <tr>
+                        <td>{{ dato.fecha | date('d-m-Y') }}</td>
+                        <td>{{ dato.nro_factura }} </td>
+                        <td>{{ dato.proveedor|upper }} </td>
+                        <td>{{ dato.total|number_format(0, ',', '.') }}</td>
+                        <td>{{ dato.impuesto|number_format(0, ',', '.') }} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ dir }}/assets/js/dataTable/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/dataTables.bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/dataTables.buttons.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/pdfmake.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/jszip.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/vfs_fonts.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/buttons.colVis.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/reportes.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(8)').addClass('active');
+        $('.side-menu li:eq(11)').addClass('active2');
+    </script>
+{% endblock %}

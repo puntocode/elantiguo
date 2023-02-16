@@ -1,0 +1,65 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Deudas{% endblock %}
+
+{% block titleDash %}Tabla de Deudas{% endblock %}
+{% block infoDash %}Muestra todas las deudas a cobrar{% endblock %}
+
+
+{% block tabla %}
+    <div class="card filterable">
+        <div class="card-header filterable">
+            <div class="card-title">
+                <h4 class="title color-danger"><i class="fa fa-money"></i> TODAS LAS DEUDAS</h4>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default btn-filter"><span class="fa fa-filter"></span> Filtro</button>
+                <button id="print" class="btn btn-default"><span class="fa fa-print"></span></button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="filters">
+                        <th>#</th>
+                        <th>FECHA</th>
+                        <th><input type="text" placeholder="NRO ORDEN" disabled></th>
+                        <th><input type="text" placeholder="CLIENTE" disabled></th>
+                        <th>DETALLE</th>
+                        <th>DEUDA</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, dato in deudas %}
+                        <tr>
+                            <td style="color: #9eaabd">{{ key+1 }}</td>
+                            <td width="100">{{ dato.fecha|date("d-m-y") }}</td>
+                            <td><a class="color-comp nro-print" href="{{ urlFor('detalle-pedido', {'id':dato.idpedidos}) }}" title="Detalle Pedido">{{ dato.nro_presupuesto }}</a></td>
+                            <td>{{ dato.cliente|upper }}</td>
+                            <td>{{ dato.obs|upper }}</td>
+                            <td class="color-danger">{{ dato.deuda|number_format(0, ',', '.') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <a class="btn btn-primary pull-left" href="{{ urlFor('calendar') }}" style="background-color: #fff; color:#001432;"><i class="fa fa-arrow-circle-left"></i> CALENDARIO</a>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/jquery.PrintArea.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(17)').addClass('active');
+        $("#print").on('click', function (){
+            $(".card").printArea();
+        });
+    </script>
+{% endblock %}

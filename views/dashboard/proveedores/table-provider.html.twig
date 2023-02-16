@@ -1,0 +1,54 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block titleDash %}Proveedores{% endblock %}
+{% block infoDash %}Tabla completa de los gastos de Proveedores correspondiente al {{ fecha.mes }} / {{ fecha.anho }}{% endblock %}
+
+{% block tabla %}
+    <div class="egress card filterable">
+        <div class="card-header filterable">
+            <div class="card-title">
+                <h4 class="title"><i class="fa fa-truck"></i> TABLA DE GASTOS EN PROVEEDORES: {{ fecha.mes }} / {{ fecha.anho }}</h4>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="fa fa-filter"></span> Filtro</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="filters">
+                        <th>#</th>
+                        <th><input type="text" class="form-control" placeholder="PROVEEDOR" style="padding-left: 0; width: 100%" disabled></th>
+                        <th>GASTO</th>
+                        <th class="text-center">DETALLE</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in table %}
+                        {% set counter=counter + 1 %}
+                        <tr>
+                            <td>{{ counter }}</td>
+                            <td>{{ dato.proveedor | upper }}</td>
+                            <td>{{ dato.egreso|number_format }}</td>
+                            <td class="text-center"><a href="{{ urlFor('table-detail-provider',{'mes':fecha.mes,'anho':fecha.anho, 'id':dato.idproveedor }) }}" ><i class="fa fa-pencil-square-o"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" style="padding-left: 0; padding-top: 15px">
+        <a class="btn btn-primary pull-left" href="{{ urlFor('dashboard', {'mes':fecha.mes, 'anho':fecha.anho}) }}" style="background-color: #fff; color:#001432;"><i class="fa fa-arrow-circle-left"></i> INICIO</a>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(0)').addClass('active');
+    </script>
+{% endblock %}

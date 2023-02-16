@@ -1,0 +1,76 @@
+{% extends '/base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/dataTables.bootstrap.min.css" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/buttons.dataTables.min.css" />
+{% endblock %}
+
+
+{% block title %}Reporte Materiales{% endblock %}
+
+{% block titleDash %}Reporte de Materiales{% endblock %}
+{% block infoDash %}Reporte del stock de materiales para el inventario.{% endblock %}
+
+
+{% block tabla %}
+    <div class="card filterable">
+        <div class="card-header">
+            <div class="card-title">
+                <h4 class="title"><i class="fa fa-file-text" aria-hidden="true"></i> TABLA REPORTE DE MATERIALES</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="datatable table table-striped" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Ubicacion</th>
+                        <th>Stock</th>
+                        <th>Uni/Med</th>
+                        <th>Minimo</th>
+                        <th>Costo</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Producto</th>
+                    <th>Ubicacion</th>
+                    <th>Stock</th>
+                    <th>Uni/Med</th>
+                    <th>Minimo</th>
+                    <th>Costo</th>
+                </tr>
+                </tfoot>
+                <tbody>
+                {% for dato in stock %}
+                    <tr>
+                        <td>{{ dato.producto | upper }}</td>
+                        <td>{{ dato.ubicacion }} </td>
+                        <td>{{ dato.cantidad }} </td>
+                        <td>{{ dato.unidad | upper }} </td>
+                        <td>{{ dato.stock_min }} </td>
+                        <td>{{ dato.costo |number_format }} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ dir }}/assets/js/dataTable/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/dataTables.bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/dataTables.buttons.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/pdfmake.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/jszip.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/vfs_fonts.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/buttons.colVis.min.js" type="text/javascript"></script>
+    <script src="{{ dir }}/assets/js/dataTable/reportes.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(1)').addClass('active');
+        $('.side-menu li:eq(3)').addClass('active2');
+    </script>
+{% endblock %}

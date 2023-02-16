@@ -1,0 +1,205 @@
+<nav class="navbar navbar-default navbar-fixed-top navbar-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-expand-toggle">
+                <i class="fa fa-bars icon"></i>
+            </button>
+            <img src="{{ dir }}/assets/images/logo.png" class="logo-img">
+            {# <ol class="breadcrumb navbar-breadcrumb">
+                 <li class="active">Dashboard</li>
+            </ol>#}
+            <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                <i class="fa fa-th icon"></i>
+            </button>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                <i class="fa fa-times icon"></i>
+            </button>
+            <li id="li-noti" class="dropdown">
+                <a href="#" class="dropdown-toggle color-danger" data-toggle="dropdown" role="button" aria-expanded="false" style="font-size: 17px;">
+                    <span id="cant-deuda" class="badge danger noti-icon-badge"></span><i class="fa fa-money canti-noti"></i>
+                </a>
+                <ul id="ul-noti" class="dropdown-menu animated fadeInDown">
+                    {#<li class="title">Pagos
+                        <span class="pull-right badge" style="background-color: #FA2A00">4</span>
+                    </li>#}
+                    <li class="hoy">
+                        <div class="title-noti text-left line-bottom">Hoy <span id="hoy">{{ "now"|date("d-m-Y")  }}</span></div>
+                        <div class="no-deuda line-bottom">NO EXISTE DEUDA</div>
+                    </li>
+
+                    <li class="tomorrow">
+                        <div class="title-noti text-left line-bottom">Mañana <span id="tomorrow">{{ "now"|date_modify("+1 day")|date("d-m-Y")  }}</span></div>
+                        <div class="no-deuda line-bottom">NO EXISTE DEUDA</div>
+                    </li>
+
+                    <li class="after-tomorrow">
+                        <div class="title-noti text-left line-bottom">Pasado Mañana <span id="after-tomorrow">{{ "now"|date_modify("+2 days")|date("d-m-Y")  }}</span></div>
+                        <div class="no-deuda line-bottom">NO EXISTE DEUDA</div>
+                    </li>
+
+                    <li id="mail" style="display: none; background-color: #fff"><a id="noti-message" href="{{ urlFor('dia-correo') }}"><i class="fa fa-envelope-o"></i> CORREO</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="{{ urlFor('calendar') }}" role="button" aria-expanded="false" class="color-danger" style="font-size: 17px">
+                    <i class="fa fa-calendar"></i>
+                </a>
+            </li>
+            {#<li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-comments-o"></i></a>
+                <ul class="dropdown-menu animated fadeInDown">
+                    <li class="title">
+                        Notification <span class="badge pull-right">0</span>
+                    </li>
+                    <li class="message">
+                        No new notification
+                    </li>
+                </ul>
+            </li>#}
+            <li class="dropdown profile">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Usuario <span class="caret"></span></a>
+                <ul class="dropdown-menu animated fadeInDown">
+                    <li class="profile-img">
+                        <img src="" class="profile-img">
+                    </li>
+                    <li>
+                        <div class="profile-info">
+                            <h4 class="username">{{ user['user'] | upper }}</h4>
+                            <p>{{ user['user'] }}@elantiguoadm.com</p>
+                            <div class="btn-group margin-bottom-2x" role="group">
+                                <button type="button" class="btn btn-default"><i class="fa fa-user"></i> Perfil</button>
+                                <a href="{{ urlFor('logout') }}" class="btn btn-default"><i class="fa fa-sign-out"></i> Salir</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="side-menu sidebar-inverse">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="side-menu-container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="">
+                    <div class="icon fa fa-laptop"></div>
+                    <div class="title">Administrador</div>
+                </a>
+                <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                    <i class="fa fa-times icon"></i>
+                </button>
+            </div>
+            <ul class="nav navbar-nav">
+                    <li>
+                        <a href="{{ urlFor('dashboard', {'mes':mes|date("m"), 'anho':anho|date("Y")}) }}">
+                            <sapan class="icon fa fa-pie-chart"></sapan><span class="title">Dashboard</span>
+                        </a>
+                    </li>
+                    <!-- Dropdown Materiales -->
+                    <li class="panel panel-default dropdown">
+                        <a data-toggle="collapse" href="#dropdown-materiales">
+                            <span class="icon fa fa-cog"></span><span class="title">Materiales</span>
+                        </a>
+                        <!-- Lista Materiales -->
+                        <div id="dropdown-materiales" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="{{ urlFor('materiales') }}">Materiales</a></li>
+                                    <li><a href="{{ urlFor('stock-report') }}">Reporte Materiales</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Dropdown Inventario -->
+                    <li class="panel panel-default dropdown">
+                        <a data-toggle="collapse" href="#dropdown-inventario">
+                            <span class="icon fa fa-cubes"></span><span class="title">Inventario</span>
+                        </a>
+                        <!-- Lista AMB -->
+                        <div id="dropdown-inventario" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="{{ urlFor('inventario') }}">Movimientos</a></li>
+                                    <li><a href="{{ urlFor('procesos') }}">Procesos</a></li>
+                                    <li><a href="{{ urlFor('reporte-inventario') }}">Reportes</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                {% if user.idrol == 1 %}
+                    <!-- Dropdown Gastos -->
+                    <li class="panel panel-default dropdown">
+                        <a data-toggle="collapse" href="#dropdown-egress">
+                            <span class="icon fa fa-arrow-down"></span><span class="title">Gastos</span>
+                        </a>
+                        <!-- Lista AMB -->
+                        <div id="dropdown-egress" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="{{ urlFor('egress') }}">Salida</a></li>
+                                    <li><a href="{{ urlFor('report-egress-search') }}">Busqueda de Gastos</a></li>
+                                    <li><a href="{{ urlFor('report-egress') }}">Reportes del Mes</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Dropdown Ingresos -->
+                    <li class="panel panel-default dropdown">
+                        <a data-toggle="collapse" href="#dropdown-ingress">
+                            <span class="icon fa fa-money"></span><span class="title">Ingresos</span>
+                        </a>
+                        <!-- Lista AMB -->
+                        <div id="dropdown-ingress" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="{{ urlFor('ingress') }}">Ingresos Facturas</a></li>
+                                    <li><a href="{{ urlFor('ingress_recibo') }}">Ingresos Recibo</a></li>
+                                    <li><a href="{{ urlFor('report-ingress') }}">Reporte Ingreso</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="{{ urlFor('budget') }}">
+                            <span class="icon fa fa-file"></span><span class="title">Presupuesto</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ urlFor('pedidos') }}">
+                            <span class="icon fa fa-shopping-cart"></span><span class="title">Pedidos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ urlFor('machine') }}">
+                            <span class="icon fa fa-wrench"></span><span class="title">Maquinarias</span>
+                        </a>
+                    </li>
+
+                    <!-- Dropdown ABM-Complete -->
+                    <li class="panel panel-default dropdown">
+                        <a data-toggle="collapse" href="#dropdown-abm">
+                            <span class="icon fa fa-folder-o"></span><span class="title">Categorias</span>
+                        </a>
+                        <!-- Lista AMB -->
+                        <div id="dropdown-abm" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="{{ urlFor('clientes') }}">Clientes</a></li>
+                                    <li><a href="{{ urlFor('provider') }}">Proveedores</a></li>
+                                    <li><a href="{{ urlFor('category') }}">Categorías de Maquinarias</a></li>
+                                    <li><a href="{{ urlFor('empleados') }}">Empleados</a></li>
+                                    <li><a href="{{ urlFor('sueldos') }}">Sueldos</a></li>
+                                    <li><a href="{{ urlFor('usuarios') }}">Usuarios</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+</div>

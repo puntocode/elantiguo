@@ -1,0 +1,7 @@
+.cabecera-presupuesto {
+  background-color: #001432;
+  color: white;
+}
+.cabecera-presupuesto [class*="col-"] {
+  margin-bottom: 0 !important;
+}

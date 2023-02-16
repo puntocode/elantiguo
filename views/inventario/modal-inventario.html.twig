@@ -1,0 +1,131 @@
+<!-- Modal Cargar Inventario Salida-->
+<div class="modal fade modal-danger" id="modal-out" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fa fa-cogs"></i> REGISTRAR SALIDA</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0">
+                <form class="form-horizontal" name="form-out" method="post" action="{{ urlFor('insert-inventario') }}" role="form">
+                    <input type="hidden" name="user" value="{{ user['iduser'] }}" />
+                    <input type="hidden" name="movimiento" value="S" />
+                    <input type="hidden" name="pendiente" value="N" />
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label>Fecha de Salida</label>
+                            <input type="date" name="fecha"  class="form-control" value="{{ now|date('Y-m-d') }}" required>
+                        </div>
+                        <div class="col-sm-8">
+                            <label>Empleado</label>
+                            <select id="sl-empleado" class="form-control" name="empleado" >
+                                {% for entity in empleados %}
+                                    <option value="{{ entity.idempleado }}">{{ entity.nombre | upper }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label>Motivo</label>
+                            <input type="text" name="motivo"  class="form-control" placeholder="Para que?"  required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label>Cantidad</label>
+                            <input type="number" step="0.01"  name="cantidad"  class="form-control" autocomplete="off" required>
+                        </div>
+                        <div class="col-sm-9">
+                            <label>Producto</label>
+                            <select id="sl-stock-sal" class="form-control" name="stock" style="width: 100%">
+                                {% for entity in productos %}
+                                    <option value="{{ entity.idstock }}">{{ entity.producto | upper }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-1 inventario-new-stock">
+                            <a href="{{ urlFor('inventario-new-stock') }}" class="btn btn-primary" style="margin-top: 23px"><i class="fa fa-cart-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="submit" class="btn btn-danger pull-right" value="SALIDA" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer alert-footer">
+                <div class="col-xs-9">
+                    <h5 class="color-success text-left alert-modal"></h5>
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-success color-success text-right end" style="background-color: #fff"> TERMINAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Cargar Inventario Entrada-->
+<div class="modal fade modal-success" id="modal-in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fa fa-cogs"></i> REGISTRAR ENTRADA</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0">
+                <form class="form-horizontal" name="form-in" method="post" action="{{ urlFor('insert-inventario') }}" role="form">
+                    <input type="hidden" name="motivo" value="entrada">
+                    <input type="hidden" name="user" value="{{ user['iduser'] }}" />
+                    <input type="hidden" name="movimiento" value="E" />
+                    <input type="hidden" name="pendiente" value="N" />
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label>Fecha de Entrada</label>
+                            <input type="date" name="fecha"  class="form-control" value="{{ now|date('Y-m-d') }}" required>
+                        </div>
+                        <div class="col-sm-8">
+                            <label>Empleado</label>
+                            <select id="sl-empleado-ent" class="form-control" name="empleado" >
+                                {% for entity in empleados %}
+                                    <option value="{{ entity.idempleado }}">{{ entity.nombre | upper }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label>Cantidad</label>
+                            <input type="number" step="0.01"  name="cantidad"  class="form-control" autocomplete="off" required>
+                        </div>
+                        <div class="col-sm-9">
+                            <label>Producto</label>
+                            <select id="sl-stock-ent" class="form-control" name="stock" style="width: 100%">
+                                {% for entity in productos %}
+                                    <option value="{{ entity.idstock }}">{{ entity.producto | upper }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-1 inventario-new-stock">
+                            <a href="{{ urlFor('inventario-new-stock') }}" class="btn btn-primary" style="margin-top: 23px"><i class="fa fa-cart-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="submit" class="btn btn-success pull-right" value="ENTRADA" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer alert-footer">
+                <div class="col-xs-9">
+                    <h5 class="color-success text-left alert-modal"></h5>
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-success color-success text-right end" style="background-color: #fff"> TERMINAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<!-- Modal -->
+<div class="modal fade modal-danger" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="myModalLabel">Desea eliminar este Registro?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                <a class="btn btn-danger btn-ok">SI</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete Inventario -->
+<div class="modal fade modal-danger" id="confirm-delete-inventario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Inventario</h4>
+            </div>
+            <div class="modal-body">
+                <h4 id="title-producto"></h4>
+                <form class="form-vertical" method="post" action="{{ urlFor('delete-inventario') }}" data-toggle="validator">
+                    <input type="hidden" name="codigo-inventario" required />
+                    <input type="hidden" name="producto" required />
+                    <input type="hidden" name="user" value="{{ user['iduser'] }}" />
+                    <div class="form-group">
+                        <input type="text" name="comentario" placeholder="Por que se elimina?"  class="form-control" required/>
+                    </div>
+                    <div class="text-right"><input type="submit" value="ELIMINAR" class="btn btn-danger"/></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Alertas -->
+{% if flash['mensaje-senha'] %}
+    <div class="bb-alert alert  animated fadeOut">
+        <span>{{ flash['mensaje'] }}</span>
+    </div>
+{% endif %}

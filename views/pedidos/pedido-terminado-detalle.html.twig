@@ -1,0 +1,83 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Pedido Terminado{% endblock %}
+{% block titleDash %} 
+     <a class="btn btn-outline-primary" href="{{ urlFor('pedidos-terminados') }}"><i class="fa fa-arrow-left"></i></a>Detalle Pedido Terminado
+{% endblock %}
+
+{% block row %}
+
+    <div class="row detail-order">
+
+        <!-- Card Pedido  -->
+        <div class="col-sm-12 pedido-card">
+            <a href="#" data-toggle="modal" data-target="#modal-up-order">
+                <div class="card navy">
+                    <div class="card-header">
+                        <div class="title-facute col-xs-2">
+                            <h2><i class="fa fa-calendar"></i> {{ order.fecha }}</h2>
+                        </div>
+                        <div class="title-facute col-xs-6">
+                            <h2 class="cliente text-center"><i class="fa fa-user"></i> {{ order.cliente }}</h2>
+                        </div>
+                        <div class="col-xs-2">
+                            <h2 id="nro-presu" class="text-center nro-factura">{{ order.factura }}</h2>
+                        </div>
+                        <div class="col-xs-2">
+                            <h2 id="nro-presu" class="text-center presupuesto">{{ order.nro_presupuesto }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <!-- Card Productos -->
+        <div id="productos" class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h4><i class="fa fa-shopping-cart"></i> PRODUCTOS</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h4 class="text-right color-danger">TOTAL: {{ total.total|number_format(0, ',', '.') }} </h4>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table id="tabla-productos" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="text-center">CANTIDAD</th>
+                                <th>PRODUCTO</th>
+                                <th>COSTO</th>
+                                <th>TOTAL</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for key,dato in detailOrder %}
+                                <tr>
+                                    <td>{{ key+1 }}</td>
+                                    <td class="text-center">{{ dato.cantidad }}</td>
+                                    <td>{{ dato.detalle|upper }}</td>
+                                    <td>{{ dato.costo|number_format(0, ',', '.') }}</td>
+                                    <td>{{ dato.total|number_format(0, ',', '.') }} </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.side-menu li:eq(17)').addClass('active');
+    </script>
+{% endblock %}

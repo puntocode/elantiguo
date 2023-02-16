@@ -1,0 +1,263 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Detalle Pedido{% endblock %}
+
+{% block titleDash %}Detalle de Pedido{% endblock %}
+{% block infoDash %}Carga los datos correspondiente a los detalles del pedido en Produccion{% endblock %}
+
+{% block nuevo %}
+    <a href="#" data-href="{{ urlFor('cancel-order', {'id':pedido.idpedidos}) }}" data-toggle="modal" data-target="#confirm-delete" class="btn btn-danger"><i class="fa fa-trash delete"></i> CANCELAR PEDIDO</a>
+    <button class="btn btn-primary"><i class="fa fa-print"></i></button>
+{% endblock %}
+
+
+{% block row %}
+    {% include '/pedidos/modal-detalle.html.twig' %}
+
+    <div class="row detail-order">
+        <!-- Alertas -->
+        {% if flash['mensaje'] %}
+            <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+                <span>{{ flash['mensaje'] }}</span>
+            </div>
+        {% endif %}
+
+
+        <!-- Card Pedido  -->
+        <div class="col-sm-12 pedido-card">
+            <a href="#" data-toggle="modal" data-target="#modal-up-order">
+                <div class="card navy">
+                    <div class="card-header">
+                        <div class="title-facute col-xs-2">
+                            <h2><i class="fa fa-calendar"></i> {{ pedido.fecha }}</h2>
+                        </div>
+                        <div class="title-facute col-xs-6">
+                            <h2 class="cliente text-center"><i class="fa fa-user"></i> {{ pedido.cliente }}</h2>
+                        </div>
+                        <div class="col-xs-2">
+                            <h2 id="nro-presu" class="text-center nro-factura">{{ pedido.factura }}</h2>
+                        </div>
+                        <div class="col-xs-2">
+                            <h2 id="nro-presu" class="text-center presupuesto">{{ pedido.nro_presupuesto }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card Monedas  -->
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="widget" style="border: 1px solid #001432; color: #001432">
+                        <div class="data-info">
+                            <div class="total-number"> {{ totales.total_productos|number_format(0, ',', '.') }}</div>
+                            <div class="desc">Total</div>
+                        </div>
+                        <div class="icon"><span class="fa fa-money"></span></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <a href="#" data-toggle="modal" data-target="#update-senha">
+                        <div class="widget" style="border: 1px solid #008BD6; color: #008BD6">
+                            <div class="data-info">
+                                <div id="senha" class="total-number">{{ pedido.senha|number_format(0, ',', '.')  }}</div>
+                                <div class="desc">Seña</div>
+                            </div>
+                            <div class="icon"><span class="fa fa-usd"></span></div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <div class="widget" style="border: 1px solid #5CB85C; color: #5CB85C">
+                        <div class="data-info">
+                            <div class="total-number">{{ totales.total_cobro|number_format(0, ',', '.')  }}</div>
+                            <div class="desc">Pagado</div>
+                        </div>
+                        <div class="icon"><span class="fa fa-credit-card"></span></div>
+                    </div>
+                </div>
+                <div class="col-md-3" >
+                    <div class="widget" style="border: 1px solid #CA090A; color: #CA090A">
+                        <div class="data-info">
+                            <div id="saldo" class="total-number">{{ (totales.saldo)|number_format(0, ',', '.') }}</div>
+                            <div class="desc">Saldo</div>
+                        </div>
+                        <div class="icon"><span class="fa fa-calculator"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Productos -->
+        <div id="productos" class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h4><i class="fa fa-shopping-cart"></i> PRODUCTOS</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <a class="btn btn-primary pull-right color-primary" href="#" data-toggle="modal" data-target="#modal-productos" data-backdrop="static" data-keyboard="false"><i class="fa fa-upload"></i> Cargar</a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table id="tabla-productos" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="text-center">CANTIDAD</th>
+                                <th>PRODUCTO</th>
+                                <th>COSTO</th>
+                                <th>TOTAL</th>
+                                <th class="text-center">CANCELAR</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for key,dato in detallepedido %}
+                                <tr>
+                                    <td>{{ key+1 }}</td>
+                                    <td class="text-center">{{ dato.cantidad }}</td>
+                                    <td>{{ dato.detalle|upper }}</td>
+                                    <td>{{ dato.costo|number_format(0, ',', '.') }}</td>
+                                    <td>{{ dato.total|number_format(0, ',', '.') }} </td>
+                                    <td class="text-center"><a href="{{ urlFor('delete-detalle-pedido', {'id':dato.iddetalle_pedido, 'idpedido':dato.idpedidos }) }}"><i class="fa fa-times"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <hr>
+                    <h4 class="text-right color-primary">TOTAL: {{ totales.total_productos|number_format(0, ',', '.') }} </h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Observacion -->
+        <div id="obs" class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h4 class="color-primary"><i class="fa fa-file"></i> OBSERVACIÓN DEL PEDIDO</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <a class="btn btn-primary pull-right color-primary" href="#" data-toggle="modal" data-target="#modal-obs"><i class="fa fa-upload"></i> Cargar</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h4 style="color: #8c8c8c">{{ pedido.obs|upper }}</h4>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Card Cobros -->
+        <div id="cobros" class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h4 class="color-success"><i class="fa fa-credit-card"></i> COBROS</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <a class="btn btn-success pull-right color-success" href="#" data-toggle="modal" data-target="#modal-pay" data-backdrop="static" data-keyboard="false"><i class="fa fa-upload"></i> Cargar</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tabla-cobro" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th class="text-center" width="20%">FECHA DE PAGO</th>
+                                <th width="15%">MONTO</th>
+                                <th width="45%">OBSERVACION</th>
+                                <th class="text-center">CANCELAR</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for key,dato in cobro %}
+                                <tr>
+                                    <td>{{ key+1 }}</td>
+                                    <td class="text-center">{{ dato.fecha }}</td>
+                                    <td>{{ dato.cobro|number_format(0, ',', '.') }}</td>
+                                    <td>{{ dato.obs|upper }}</td>
+                                    <td class="text-center"><a href="{{ urlFor('cancel-pay', {'id':dato.idcobro, 'idpedido':dato.idpedidos }) }}"><i class="fa fa-times"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <hr>
+                    <h4 class="text-right color-success">TOTAL: {{ totales.total_cobro|number_format(0, ',', '.') }} </h4>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Card Deudas -->
+        <div id="deudas" class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h4 style="color: #CA090A"><i class="fa fa-calculator"></i> DEUDAS</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <a class="btn btn-danger pull-right" href="#" data-toggle="modal" data-target="#modal-debt" data-backdrop="static" data-keyboard="false" style="color: #CA090A"><i class="fa fa-upload"></i> Cargar</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {#TABLA DE DEUDA#}
+                    <div class="table-responsive">
+                        <table id="tabla-deuda" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th class="text-center" width="20%">FECHA A PAGAR</th>
+                                <th width="15%">MONTO A PAGAR</th>
+                                <th width="45%">DETALLE</th>
+                                <th class="text-center">CANCELAR</th>
+                                <th class="text-center">PAGAR</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for key,dato in deuda %}
+                                <tr>
+                                    <td>{{ key+1 }}</td>
+                                    <td class="text-center">{{ dato.fecha }}</td>
+                                    <td class="deuda-pay">{{ dato.deuda|number_format(0, ',', '.') }}</td>
+                                    <td class="obs-pay">{{ dato.obs|upper }}</td>
+                                    <td class="text-center"><a href="{{ urlFor('cancel-debt', {'id':dato.iddeuda, 'idpedido':dato.idpedidos }) }}"><i class="fa fa-times"></i></a></td>
+                                    <td class="text-center"><a id="{{ dato.iddeuda }}" href="" data-toggle="modal" data-target="#confirm-pay" class="cobro"><i class="fa fa-money"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <hr>
+                    <h4 class="text-right color-danger">TOTAL: {{ totales.total_deuda|number_format(0, ',', '.') }} </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <a class="btn btn-primary pull-left" href="{{ urlFor('pedidos') }}" style="background-color: #fff; color:#001432;"><i class="fa fa-arrow-circle-left"></i> PEDIDOS</a>
+            <a id="end-order" style="display: none" class="btn btn-success pull-right" href="{{ urlFor('end-order', {id: pedido.idpedidos}) }}">TERMINAR PEDIDO</a>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/date.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/moneda.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/delete.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/pedidos/detalle-pedido.js"></script>
+{% endblock %}

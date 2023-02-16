@@ -1,0 +1,68 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Maquinarias{% endblock %}
+
+{% block titleDash %}Maquinarias{% endblock %}
+{% block infoDash %}Registro de Maquinarias producidas por la empresa{% endblock %}
+
+{% block nuevo %}
+    {% include '/maquinarias/machine-modal.html.twig' %}
+{% endblock %}
+
+{% block tabla %}
+    <div class="egress card filterable">
+        <div class="card-header filterable">
+            <div class="card-title">
+                <h4 class="title"><i class="fa fa-wrench"></i> TABLA DE PRODUCTOS</h4>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="fa fa-filter"></span> Filtro</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="filters">
+                        <th class="text-left">IMAGEN</th>
+                        <th><input type="text" placeholder="PRODUCTO" disabled></th>
+                        <th><input type="text" placeholder="CATEGORIA" disabled></th>
+                        <th>VALOR DE VENTA</th>
+                        <th class="text-center">EDITAR</th>
+                        <th class="text-center">CARGAR</th>
+                        <th class="text-center">IMPRIMIR</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in producto %}
+                        <tr>
+                            <td class="text-center foto">
+                                <div class="img-container">
+                                    <a id="{{ dato.idproducto }}" class="update-image" href="" data-toggle="modal" data-target="#modal-up-image">
+                                        <img src="{{ dir }}/assets/images/productos/{{ dato.img_small }}" alt="{{ dato.img_small }}">
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="producto">{{ dato.producto|upper }}</td>
+                            <td class="categoria">{{ dato.categoria|upper }}</td>
+                            <td class="valor">{{ dato.valor_venta|number_format(0, ',', '.') }} </td>
+                            <td class="text-center">
+                                <a class="update-product" href="" data-toggle="modal" data-target="#modal-update-product">
+                                     <i class="fa fa-pencil-square-o"><input name="id" type="hidden" value="{{ dato.idproducto }}" /></i>
+                                </a>
+                            </td>
+                            <td class="text-center"><a href="{{ urlFor('detail-machine', {'id':dato.idproducto}) }}"><i class="fa fa-th-list"></i></a></td>
+                            <td class="text-center"><a href="{{ urlFor('print-machine', {'id':dato.idproducto}) }}"><i class="fa fa-print"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/producto/machine.js"></script>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block titleDash %}Estadistica - {{ fecha.mes }} / {{ fecha.anho }}{% endblock %}
+{% block infoDash %}Estadisticas y Resultados{% endblock %}
+
+{% block nuevo %}
+    <button class="btn btn-primary" data-toggle="modal" data-target="#mensual"><i class="fa fa-search"></i> BUSQUEDA MENSUAL</button>
+    {% include '/include/alert.html.twig' %}
+    {% include '/dashboard/modal.html.twig' %}
+
+{% endblock %}
+
+{% block row %}
+<div class="dashboard">
+    {#Fila de Letreros #}
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <a href="#" data-toggle="modal" data-target="#modal-detalle-ingreso">
+                <div class="card green summary-inline">
+                    <div class="card-body">
+                        <i class="icon fa fa-arrow-circle-up fa-4x"></i>
+
+                        <div class="content">
+                            <div class="title"><span class="counter">{{ (letrero.ingreso_factura_money+letrero.ingreso_recibo_money)|number_format }}</span></div>
+                            <div class="sub-title">Ingresos</div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <a href="#" data-toggle="modal" data-target="#modal-detalle-egreso">
+                <div class="card red summary-inline">
+                    <div class="card-body">
+                        <i class="icon fa fa-arrow-circle-down fa-4x"></i>
+
+                        <div class="content">
+                            <div class="title"><span class="counter">{{ (letrero.egreso+letrero.sueldo)|number_format }}</span></div>
+                            <div class="sub-title">Egresos</div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <a href="">
+                <div class="card blue summary-inline">
+                    <div class="card-body">
+                        <i class="icon fa fa-line-chart fa-4x"></i>
+
+                        <div class="content">
+                            <div class="title"><span class="counter">{{ letrero.ganancia|number_format }}</span></div>
+                            <div class="sub-title">Ganancia</div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    {# Fila de Graficos #}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h4 class="title"><i class="fa fa-line-chart"></i> Balance Anual</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="line-balance"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Fila de Graficos #}
+    <div class="row">
+        <div class="col-sm-4 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h4 class="title"><i class="fa fa-user"></i> Clientes</h4>
+                    </div>
+                    <div class="table-total pull-right">
+                        <a href="{{ urlFor('table-customer',{'mes':fecha.mes,'anho':fecha.anho }) }}"><i class=" fa fa-table"></i></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="doughnut-clientes"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h4 class="title"><i class="fa fa-truck"></i> Proveedores</h4>
+                    </div>
+                    <div class="table-total pull-right">
+                        <a href="{{ urlFor('table-egress',{'mes':fecha.mes,'anho':fecha.anho }) }}"><i class=" fa fa-table"></i></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="doughnut-egresos"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h4 class="title"><i class="fa fa-cogs"></i> Productos</h4>
+                    </div>
+                    <div class="table-total pull-right">
+                        <a href="{{ urlFor('table-product',{'mes':fecha.mes,'anho':fecha.anho }) }}"><i class=" fa fa-table"></i></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="doughnut-productos"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/lib/counter-up/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/lib/counter-up/jquery.counterup.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/lib/numeral/numeral.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/chart/Chart.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/chart/Chart.PieceLabel.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/chart/charts.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(0)').addClass('active');
+        $('.counter').counterUp();
+
+        $('#report-dashboard').on('click', function (){
+            var mes = $('#select-month').val();
+            var year = $('#select-year').val();
+            var url = mes+'-'+year;
+            $(location).attr('href',url);
+        });
+    </script>
+{% endblock %}

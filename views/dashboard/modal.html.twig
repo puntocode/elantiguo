@@ -1,0 +1,243 @@
+<!-- Modal BUSQUEDA MENSUAL-->
+
+<div class="modal fade" id="mensual" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                <h4><i class="fa fa-search"></i> BUSQUEDA MENSUAL</h4>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form class="form-horizontal" name="insert-user" method="post" action="{{ urlFor('insert-empleado') }}" data-toggle="validator">
+
+                    <div class="form-group">
+
+                        <label for="title" class="col-sm-2 control-label">Mes</label>
+
+                        <div class="col-sm-10">
+
+                            <select id="select-month" name="mes" class="form-control"  required>
+
+                                <option value="1">Enero</option>
+
+                                <option value="2">Febrero</option>
+
+                                <option value="3">Marzo</option>
+
+                                <option value="4">Abril</option>
+
+                                <option value="5">Mayo</option>
+
+                                <option value="6">Junio</option>
+
+                                <option value="7">Julio</option>
+
+                                <option value="8">Agosto</option>
+
+                                <option value="9">Septiembre</option>
+
+                                <option value="10">Octubre</option>
+
+                                <option value="11">Noviembre</option>
+
+                                <option value="12">Diciembre</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="title" class="col-sm-2 control-label">Año</label>
+
+                        <div class="col-sm-10">
+                            <select id="select-year"  name="anho"  class="form-control"  required>
+				                <option value="2023">2023</option>				
+				                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <a href="#" id="report-dashboard" class="btn btn-wd btn-info">REPORTE</a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="modal fade modal-success modal-dashboard" id="modal-detalle-ingreso" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                <h3><i class="fa fa-money"></i> INGRESOS</h3>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row color-success line-dark">
+
+                    <div class="col-xs-8"><h4>TOTAL INGRESO DINERO DEL MES</h4></div>
+
+                    <div class="col-xs-4"><h4>{{ (letrero.ingreso_factura_money+letrero.ingreso_recibo_money)|number_format(0, ',', '.')  }}</h4></div>
+
+                </div>
+
+                <div class="row color-primary">
+
+                    <div class="col-xs-8"><h4>TOTAL FACTURADO</h4></div>
+
+                    <div class="col-xs-4"><h4>{{ (letrero.ingreso_factura_money+letrero.ingress_factura_doc)|number_format(0, ',', '.')  }}</h4></div>
+
+                </div>
+
+                <div class="row color-primary text-center">
+
+                    <div class="col-xs-6"><h5>TOTAL FACTURADO DINERO</h5></div>
+
+                    <div class="col-xs-6"><h5>TOTAL FACTURADO DOCUMENTO</h5></div>
+
+                </div>
+
+                <div class="row color-primary text-center">
+
+                    <div class="col-xs-6"><h5>{{ letrero.ingreso_factura_money|number_format(0, ',', '.')  }}</h5></div>
+
+                    <div class="col-xs-6"><h5>{{ letrero.ingress_factura_doc|number_format(0, ',', '.')  }}</h5></div>
+
+                </div>
+
+                <div class="row color-danger line-dark">
+
+                    <div class="col-xs-8"><h4>TOTAL IVA (10%)</h4></div>
+
+                    <div class="col-xs-4"><h4>{{ ((letrero.ingreso_factura_money+letrero.ingress_factura_doc)/11)|number_format(0, ',', '.') }}</h4></div>
+
+                </div>
+
+                <div class="row color-primary">
+
+                    <div class="col-xs-8"><h4>TOTAL RECIBOS</h4></div>
+
+                    <div class="col-xs-4"><h4>{{ (letrero.ingreso_recibo_money+letrero.ingress_recibo_doc)|number_format(0, ',', '.')  }}</h4></div>
+
+                </div>
+
+                <div class="row color-primary text-center">
+
+                    <div class="col-xs-6"><h5>TOTAL RECIBO DINERO</h5></div>
+
+                    <div class="col-xs-6"><h5>TOTAL RECIBO DOCUMENTO</h5></div>
+
+                </div>
+
+                <div class="row color-primary text-center">
+
+                    <div class="col-xs-6"><h5>{{ letrero.ingreso_recibo_money|number_format(0, ',', '.')  }}</h5></div>
+
+                    <div class="col-xs-6"><h5>{{ letrero.ingress_recibo_doc|number_format(0, ',', '.')  }}</h5></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="modal fade modal-danger modal-dashboard" id="modal-detalle-egreso" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                <h3><i class="fa fa-money"></i> EGRESOS</h3>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row color-danger">
+
+                    <div class="col-xs-8"><h4>GASTOS DEL MES</h4></div>
+
+                    <div class="col-xs-4"><h4>{{ (letrero.egreso+letrero.sueldo)|number_format(0, ',', '.')  }}</h4></div>
+
+                </div>
+
+                <div class="row color-primary">
+
+                    <div class="col-xs-8"><h4>GASTOS CON FACTURAS</h4></div>
+
+                    <div class="col-xs-4"><h4>{{ letrero.total_iva|number_format(0, ',', '.')  }}</h4></div>
+
+                    <div class="col-xs-8 color-success"><h4>IVA DEL MES (10%)</h4></div>
+
+                    <div class="col-xs-4 color-success"><h4>{{ ((letrero.total_iva)/11)|number_format(0, ',', '.') }}</h4></div>
+
+                </div>
+
+                <div class="row color-primary">
+
+                    <div class="col-xs-8"><h4>GASTOS EXENTOS</h4></div>
+
+                    <div class="col-xs-4"><h4>{{ (letrero.total_exento)|number_format(0, ',', '.') }}</h4></div>
+
+                </div>
+
+                <div class="row color-primary">
+
+                    <div class="col-xs-8"><h4>GASTOS EN SUELDO</h4></div>
+
+                    <div class="col-xs-4"><h4>{{ letrero.sueldo|number_format(0, ',', '.') }}</h4></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

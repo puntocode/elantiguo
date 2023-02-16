@@ -1,0 +1,197 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cargar Pedido{% endblock %}
+{% block stylesheets %}
+    <link href="{{ dir }}/assets/css/select2.min.css" rel="stylesheet"/>
+{% endblock %}
+
+
+{% block titleDash %}Cargar nuevo pedido{% endblock %}
+{% block infoDash %}Cargar un nuevo pedido de la empresa{% endblock %}
+
+{% block row %}
+    <div class="row detail-order">
+        <!-- Alertas -->
+        {% if flash['mensaje'] %}
+            <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+                <span>{{ flash['mensaje'] }}</span>
+            </div>
+        {% endif %}
+
+        <!-- Card Cabecera ingreso  -->
+        <div class="cabecera-ingress col-sm-12">
+            <div class="card navy">
+                <div class="card-header">
+                    <form class="form" name="new-pedido" method="post" action="{{ urlFor('insert-order') }}" role="form">
+                        <div class="col-xs-3">
+                            <label for="">Fecha</label>
+                            <input id="fecha-pedido" type="date" name="date"  class="form-control"  value="{{ now|date('Y-m-d') }}" required />
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <div class="col-xs-10 inventario-new-stock">
+                                <label for="">Cliente</label>
+                                <select id="sl-customer" class="form-control" name="customer" style="width: 100%">
+                                    {% for entity in clientes %}
+                                        <option value="{{ entity.idcliente }}">{{ entity.cliente|upper }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="add-customer">
+                                <button type="button" id="btn-add-customer" data-toggle="modal" data-target="#modal-add-customer" class="btn btn-primary" style="background-color: #001432">
+                                    <i class="fa fa-user-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <label for="">Nro. Presupuesto</label>
+                            <input id="nro_pedido" type="text" name="nro-order"  class="form-control upper" placeholder="EA-000-00" autocomplete="off"  required>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="widget" style="border: 1px solid #001432; color: #001432">
+                        <div class="data-info">
+                            <div class="total-number">0</div>
+                            <div class="desc">Total</div>
+                        </div>
+                        <div class="icon"><span class="fa fa-money"></span></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <a href="#" data-toggle="modal" data-target="#update-senha">
+                        <div class="widget" style="border: 1px solid #008BD6; color: #008BD6">
+                            <div class="data-info">
+                                <div class="total-number">0</div>
+                                <div class="desc">Seña</div>
+                            </div>
+                            <div class="icon"><span class="fa fa-usd"></span></div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <div class="widget" style="border: 1px solid #5CB85C; color: #5CB85C">
+                        <div class="data-info">
+                            <div class="total-number">0</div>
+                            <div class="desc">Pagado</div>
+                        </div>
+                        <div class="icon"><span class="fa fa-credit-card"></span></div>
+                    </div>
+                </div>
+                <div class="col-md-3" >
+                    <div class="widget" style="border: 1px solid #EF6262; color: #EF6262">
+                        <div class="data-info">
+                            <div id="saldo" class="total-number">0</div>
+                            <div class="desc">Saldo</div>
+                        </div>
+                        <div class="icon"><span class="fa fa-calculator"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Productos
+        <div id="productos" class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h4><i class="fa fa-shopping-cart"></i> PRODUCTOS</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h4 class="text-right total">TOTAL: 0 </h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col-xs-12">
+                        <form class="form form-inline" name="detalle-pedido" method="post" action="{{ urlFor('insert-order') }}" role="form">
+                            <input type="hidden" name="fecha">
+                            <input type="hidden" name="idcliente">
+                            <input type="hidden" name="presupuesto">
+                            <div class="form-group col-xs-2">
+                                <input type="number" name="cantidad" class="form-control" placeholder="cantidad" autocomplete="off" required>
+                            </div>
+
+                            <div class="form-group col-xs-5">
+                                <input list="list-productos" name="producto" class="form-control" required title="Detalle del Producto">
+                                <datalist id="list-productos">
+                                   {# {% for entity in productos %}
+                                        <option value="{{ entity.producto|lower }}"></option>
+                                    {% endfor %}#}
+                                </datalist>
+                            </div>
+
+                            <div class="form-group col-xs-3">
+                                <input type="text" name="costo" class="form-control moneda" placeholder="costo" autocomplete="off" required>
+                            </div>
+
+                            <div class="form-group col-xs-2 text-right">
+                                <input id="insertar" type="submit" class="btn btn-info" value="INSERTAR" disabled />
+                            </div>
+                        </form>
+                    </div>
+
+                    {#TABLA DE PRODUCTOS#}
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="text-center">CANTIDAD</th>
+                                    <th>PRODUCTO</th>
+                                    <th>COSTO</th>
+                                    <th>TOTAL</th>
+                                    <th class="text-center">CANCELAR</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="col-sm-12">
+            <a class="btn btn-primary pull-left color-primary" href="{{ urlFor('pedidos') }}" style="background-color: #fff;"><i class="fa fa-arrow-circle-left"></i> INICIO</a>
+        </div>
+    </div>
+
+    {% include '/include/add-customer.html.twig' %}
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/select2.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/select2.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/moneda.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/new-cliente-ajax.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(17)').addClass('active');
+
+        $('#sl-customer').select2();
+
+        $('#nro_pedido').keypress(function(e) {
+            if(e.which == 13) {
+                if( $(this).val().length === 0 ) {
+                    $(this).css('border-color','red');
+                    $('#insertar').attr('disabled',true);
+                }else{
+                    var fecha = $('#fecha-pedido').val();
+                    var idCliente = $('#sl-customer').val();
+                    var presupuesto = $('#nro_pedido').val();
+                    $('input[name="fecha"]').val(fecha);
+                    $('input[name="idcliente"]').val(idCliente);
+                    $('input[name="presupuesto"]').val(presupuesto);
+                    $('input[name="cantidad"]').focus();
+                    $('#insertar').removeAttr('disabled');
+                }
+            }
+        });
+    </script>
+{% endblock %}

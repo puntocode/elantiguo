@@ -1,0 +1,228 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cargar Producto{% endblock %}
+{% block stylesheets %}<link href="{{ dir }}/assets/css/select2.min.css" rel="stylesheet"/>{% endblock %}
+
+{% block titleDash %}Detalle de Maquinaria{% endblock %}
+{% block infoDash %}Carga los datos correspondiente a la maquinaria en producion{% endblock %}
+
+{% block row %}
+    <div class="row upload-machine">
+        <!-- Alertas -->
+        {% if flash['mensaje'] %}
+            <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+                <span>{{ flash['mensaje'] }}</span>
+            </div>
+        {% endif %}
+
+
+        <div class="modal fade" id="modal-add-stock" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4><i class="fa fa-cog"></i> AGREGAR PRODUCTO</h4>
+                    </div>
+                    <form class="form-horizontal" name="add-stock" method="post" action="{{ urlFor('insert-stock-ajax') }}" data-toggle="validator">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Producto</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="producto" class="form-control" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Ubicacion</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="ubicacion" class="form-control upper" placeholder="X.0.0" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Uni/Med</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="unidad" class="form-control upper" placeholder="U/M" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Stock Minimo</label>
+                                <div class="col-sm-10">
+                                    <input type="number" step="0.01" name="minimo" class="form-control" autocomplete="off" placeholder="0" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Costo</label>
+                                <div class="col-sm-10">
+                                    <input type="number" name="costo" class="form-control" placeholder="0" autocomplete="off" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> INSERTAR</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Card Maquina Nombre -->
+        <div class="col-sm-12">
+            <div class="card blue">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h2><i class="fa fa-wrench"></i> {{ sum_detalle.producto|upper }}</h2>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h2 class="text-right">TOTAL: {{ (sum_detalle.total+sum_mdo.total)|number_format(0, ',', '.') }} </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Materiales -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h4><i class="fa fa-cogs"></i> MATERIALES</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h4 class="text-right total">TOTAL: {{ sum_detalle.total|number_format(0, ',', '.') }} </h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col-xs-12">
+                        <form class="form form-inline" name="detalle-pasivo" method="post" action="{{ urlFor('insert-detail-machine') }}" role="form">
+                            <input type="hidden" name="idproducto" class="form-control" value="{{ idproducto.codigo }}" required>
+
+                            <div class="form-group col-xs-6">
+                                    <select id="sl-stock" class="form-control" name="stock" style="width: 90%">
+                                        {% for entity in stock %}
+                                            <option value="{{ entity.idstock }}">{{ entity.stock|upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                <button type="button" id="btn-add-stock" data-toggle="modal" data-target="#modal-add-stock" class="btn btn-primary"><i class="fa fa-cart-plus"></i></button>
+                            </div>
+
+                            <div class="form-group col-xs-2">
+                                <select id="sl-stock-cost" class="form-control" name="cost" disabled style="width: 100%">
+                                    {% for entity in stock %}
+                                        <option value="{{ entity.idstock }}">{{ entity.costo|number_format(0, ',', '.') }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group col-xs-2">
+                                <input type="number" step="0.01" name="quantity" class="form-control" placeholder="cantidad" required>
+                            </div>
+
+                            <div class="form-group col-xs-2 text-right">
+                                <input type="submit" class="btn btn-info" value="INSERTAR" />
+                            </div>
+                        </form>
+                    </div>
+
+                    {#TABLA DE MATERIALES#}
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr class="filters">
+                                    <th>CANTIDAD</th>
+                                    <th>PRODUCTO</th>
+                                    <th>COSTO</th>
+                                    <th>TOTAL</th>
+                                    <th class="text-center">ELIMINAR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for dato in materiales %}
+                                    <tr>
+                                        <td>{{ dato.cantidad }}</td>
+                                        <td>{{ dato.material|upper }}</td>
+                                        <td>{{ dato.costo|number_format(0, ',', '.') }}</td>
+                                        <td>{{ dato.total|number_format(0, ',', '.') }} </td>
+                                        <td class="text-center"><a href="{{ urlFor('delete-detalle-producto', {'id':dato.iddetalle_producto,'idproducto':idproducto.codigo }) }}"><i class="fa fa-times"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Mano de Obra -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h4><i class="fa fa-sign-language"></i> MANO DE OBRA</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h4 class="text-right total" >TOTAL: {{ sum_mdo.total|number_format(0, ',', '.') }} </h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col-xs-12">
+                        <form class="form form-inline" name="detalle-pasivo" method="post" action="{{ urlFor('insert-mano-obra') }}" role="form">
+                            <input type="hidden" name="idproducto" class="form-control" value="{{ idproducto.codigo }}" required>
+
+                            <div class="form-group col-xs-7">
+                                    <input list="list-mdo" name="mano-obra" class="form-control" autocomplete="off" required>
+                                    <datalist id="list-mdo">
+                                        {% for entity in empleados %}
+                                            <option value="{{ entity.nombre|upper }}"></option>
+                                        {% endfor %}
+                                    </datalist>
+                            </div>
+
+                            <div class="form-group col-xs-3">
+                                <input type="text" name="cost" class="form-control moneda" placeholder="costo" autocomplete="off" required>
+                            </div>
+
+                            <div class="form-group col-xs-2 text-right">
+                                <input type="submit" class="btn btn-info" value="INSERTAR" />
+                            </div>
+                        </form>
+                    </div>
+
+                    {#TABLA DE MDO#}
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr class="filters">
+                                    <th>MANO DE OBRA</th>
+                                    <th>COSTO</th>
+                                    <th class="text-center">ELIMINAR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for dato in mano_obra %}
+                                    <tr>
+                                        <td>{{ dato.mano_obra|upper }}</td>
+                                        <td>{{ dato.costo|number_format(0, ',', '.') }}</td>
+                                        <td class="text-center"><a href="{{ urlFor('delete-mano-obra', {'id':dato.idmano_obra,'idproducto':idproducto.codigo }) }}"><i class="fa fa-times"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <div class="col-sm-12">
+             <a class="btn btn-success pull-right" href="{{ urlFor('machine') }}">TERMINAR MAQUINA</a>
+         </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/select2.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/producto/detalle_producto.js"></script>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Gastos{% endblock %}
+{% block stylesheets %}
+    <link href="{{ dir }}/assets/css/select2.min.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block titleDash %}Gastos{% endblock %}
+{% block infoDash %}Facturas de gastos del mes{% endblock %}
+
+{% block nuevo %}
+    <a class="btn btn-primary" href="{{ urlFor('upload-egress') }}">NUEVO GASTO</a>
+{% endblock %}
+
+
+{% block tabla %}
+    <div class="egress card filterable">
+        <div class="card-header filterable">
+            <div class="card-title">
+                <h4 class="title"><i class="fa fa-file-text"></i> FACTURAS DE GASTOS: {{ mes|date("m") }} / {{ anho|date("Y") }}</h4>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="fa fa-filter"></span> Filtro</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="filters">
+                        <th>FECHA</th>
+                        <th><input type="text" placeholder="NRO FACTURA" disabled></th>
+                        <th><input type="text" placeholder="PROVEEDOR" disabled></th>
+                        <th>GASTO</th>
+                        <th>IVA</th>
+                        <th class="text-center">FACTURA</th>
+                        <th class="text-center">DETALLE</th>
+                        <th class="text-center">ANULAR</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in egress %}
+                        {% if dato.estado == "A" %}
+                            <tr style="color:#FA2A00">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                            <td class="fecha-factura">{{ dato.fecha|date("Y/m/d") }}</td>
+                            <td class="nro-factura">{{ dato.nro_factura }}</td>
+                            <td class="provider">{{ dato.proveedor|upper }}</td>
+                            <td>{{ (dato.total-dato.descuento)|number_format(0, ',', '.') }} </td>
+                            <td>{{ ((dato.total-dato.descuento)/11)|number_format(0, ',', '.') }} </td>
+                            <td class="text-center">
+                                <a class="update-facture" href="" data-toggle="modal" data-target="#modal-update-facture">
+                                    <i class="fa fa-pencil-square-o"> <input name="id-pasivo" type="hidden" value="{{ dato.idpasivo }}"></i>
+                                </a>
+                            </td>
+                            <td class="text-center"><a href="{{ urlFor('up-detalle-pasivo', {'id':dato.idpasivo}) }}"><i class="fa fa-th-list"></i></a></td>
+                            <td class="text-center"><a href="#" data-href="{{ urlFor('null-facture', {'id':dato.idpasivo}) }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-times" style="color:#FA2A00"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            <h4><i class="fa fa-arrow-down"></i> TOTAL GASTO DEL MES Gs.: {{ suma.total|number_format(0, ',', '.') }}</h4>
+        </div>
+    </div>
+
+    <!-- Modal Anular Factura-->
+    <div class="modal fade modal-danger" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="myModalLabel">Desea anular esta Factura?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a class="btn btn-danger btn-ok">SI</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Cabecera Factura-->
+    <div class="modal fade" id="modal-update-facture" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-pencil-square-o"></i> ACTUALIZAR FACTURA</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- Modal Form -->
+                    <form class="form-horizontal" name="update-facture" method="post" action="{{ urlFor('update-pasivo') }}" data-toggle="validator">
+                        <input type="hidden" id="id-pasivo" name="id-egress" required />
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">Fecha Factura</label>
+                            <div class="col-sm-9">
+                                <input type="date" name="fecha-factura" class="form-control" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">Nro. Factura</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="nro-factura" placeholder="000-000-0000" autocomplete="off" class="form-control" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">Proveedor</label>
+                            <div class="col-sm-9">
+                                <select id="sl-provider" class="form-control" name="provider" style="width: 100%">
+                                    {% for entity in provider %}
+                                        <option value="{{ entity.idproveedor }}">{{ entity.proveedor|upper }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-right"><input id="guardar" type="submit" value="ACTUALIZAR" class="btn btn-info"/></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Alertas -->
+    {% if flash['mensaje'] %}
+        <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+            <span>{{ flash['mensaje'] }}</span>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/date.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/select2.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/delete.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(8)').addClass('active');
+        $('.side-menu li:eq(9)').addClass('active2');
+        $("#sl-provider").select2({
+            dropdownParent: $('#modal-update-facture')
+        });
+
+
+        $('.update-facture').on('click', function () {
+            var idPasivo = $('input[name="id-pasivo"]', this).val();
+            var fecha =  $(this).parents("tr").find(".fecha-factura").html();
+            var nroFactura = $(this).parents("tr").find(".nro-factura").html();
+            var proveedor = $(this).parents("tr").find(".provider").html();
+            var date = Date.parse(fecha);
+
+            $('#id-pasivo').val(idPasivo);
+            $('input[name="fecha-factura"]').val(date.toString('yyyy-MM-dd'));
+            $('input[name="nro-factura"]').val(nroFactura);
+            var id=$("#sl-provider option").filter(function() {
+                    return this.text == proveedor;
+            }).val();
+            //alert(proveedor);
+            $("#sl-provider").val(id).change();
+
+        });
+
+    </script>
+{% endblock %}

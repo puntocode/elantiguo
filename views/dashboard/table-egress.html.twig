@@ -1,0 +1,52 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block titleDash %}Proveedores{% endblock %}
+{% block infoDash %}Tabla completa de los gastos de Proveedores correspondiente al {{ fecha.mes }} / {{ fecha.anho }}{% endblock %}
+
+{% block tabla %}
+    <div class="card filterable">
+        <div class="card-header">
+            <div class="card-title">
+                <div class="title"><i class="fa fa-file-text-o"></i> TABLA DE GASTOS EN PROVEEDORES {{ fecha.mes }} / {{ fecha.anho }}</div>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="fa fa-filter"></span> Filtro</button>
+            </div>
+        </div>
+        <div class="card-body no-padding">
+            <div class="table-responsive">
+                <table class="table table-hover tablesorter">
+                    <thead>
+                    <tr class="filters">
+                        <th>#</th>
+                        <th><input type="text" class="form-control" placeholder="PROVEEDOR" disabled></th>
+                        <th>GASTO</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in table %}
+                        {% set counter=counter + 1 %}
+                        <tr>
+                            <td>{{ counter }}</td>
+                            <td>{{ dato.proveedor | upper }}</td>
+                            <td>{{ dato.egreso|number_format }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div><a class="btn btn-xs btn-primary" href="{{ urlFor('dashboard', {'mes':fecha.mes, 'anho':fecha.anho}) }}"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Regresar</a></div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/jquery.tablesorter.min.js"></script>
+    {# <script type="text/javascript" src="{{ dir }}/assets/js/chart/charts.js"></script>#}
+    <script type="text/javascript">
+        $('.side-menu li:eq(0)').addClass('active');
+       // $('.tablesorter').tablesorter();
+    </script>
+{% endblock %}

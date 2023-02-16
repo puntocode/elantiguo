@@ -1,0 +1,182 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Presupuestos{% endblock %}
+{% block stylesheets %}
+    <link href="{{ dir }}/assets/css/pages/presupuesto.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block titleDash %} 
+     <a class="btn btn-outline-primary" href="{{ urlFor('budget') }}"><i class="fa fa-arrow-left"></i></a>Detalle Presupuesto
+{% endblock %}
+
+{% block infoDash %}Cargar los productos para los Presupuestos{% endblock %}
+
+{% block nuevo %}
+    <a class="btn btn-success" href="{{ urlFor('budget-print', {id:budget.idpresupuesto}) }}" ><i class="fa fa-print"></i> GUARDAR E IMPRIMIR</a>
+{% endblock %}
+
+{% block tabla %}
+ 
+    <!-- Card Cabecera Presupuesto  -->
+    <div class="row cabecera-presupuesto">
+        <div class="col-sm-2"><h5><i class="fa fa-calendar"></i> {{ budget.fecha|date("d-m-Y") }}</h5></div>
+        <div class="col-sm-7"><h5><i class="fa fa-user"></i> {{ budget.cliente|upper }}</h5></div>
+        <div class="col-sm-2"><h5><i class="fa fa-file"></i> {{ budget.numero }}</h5></div>
+        <div class="col-sm-1">
+            <h5><a href="" data-toggle="modal" data-target="#modal-update-presupuesto" style="color: #19B5FE"><i class="fa fa-edit"></i></a></h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 text-black"><h5>{{ budget.descripcion|upper }}</h5></div>
+    </div>
+
+    <div class="row detail-order">
+            <div class="card">
+                <div class="card-header" style="padding-top:0;padding-bottom:0;">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h5>PRESUPUESTO</h5>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h5 class="text-right" style="color: red" >TOTAL: <span id="total-fac">{{ total.total|number_format(0, ',', '.') }}</span> Gs. </h5>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-xs-12" style="padding-top: 15px;">
+                        <form class="form-inline" name="detalle-presupuesto" role="form" method="post" action="{{ urlFor('insert-detail-budget') }}">
+                            <input type="hidden" name="id-presupuesto" value="{{ budget.idpresupuesto }}">
+
+                            <div class="form-group col-xs-2">
+                                <input type="text" class="form-control moneda" name="cantidad" autocomplete="off" placeholder="cantidad" required />
+                            </div>
+                            
+                            <div class="form-group col-xs-6">
+                                <input list="list-productos" name="producto" class="form-control" required title="Detalle del Producto">
+                                <datalist id="list-productos">
+                                    {% for entity in productos %}
+                                        <option value="{{ entity.producto|lower }}"></option>
+                                    {% endfor %}
+                                </datalist>
+                            </div>
+
+                            <div class="form-group col-xs-2">
+                                <input type="text" class="form-control moneda" name="costo" autocomplete="off" placeholder="costo" required />
+                            </div>
+
+                            <div class="form-group col-xs-2">
+                                <input type="submit" class="btn btn-info" value="INSERTAR" />
+                            </div>
+                        </form>
+                    </div>
+
+
+                    {#TABLA DE PRODUCTOS#}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="tabla-factura" class="table table-hover">
+                                    <thead>
+                                    <tr class="table-cabecera">
+                                        <th>CANTIDAD</th>
+                                        <th>PRODUCTO</th>
+                                        <th>COSTO</th>
+                                        <th>TOTAL</th>
+                                        <th class="text-center"> ELIMINAR</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="table-detalle">
+                                    {% for dato in detailBudget %}
+                                        <tr>
+                                            <td>{{ dato.cantidad }}</td>
+                                            <td>{{ dato.producto|upper }}</td>
+                                            <td>{{ dato.costo|number_format(0, ',', '.') }}</td>
+                                            <td>{{ (dato.cantidad*dato.costo)|number_format(0, ',', '.') }} </td>
+                                            <td class="text-center acciones">
+                                                <a href="#" data-href="{{ urlFor('update-detail-budget-estado-delete',{id:dato.iddetalle_presupuesto}) }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-times delete"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- Alertas -->
+    {% if flash['mensaje'] %}
+        <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+            <span>{{ flash['mensaje'] }}</span>
+        </div>
+    {% endif %}
+    {% include '/include/modal-delete.html.twig' %}
+
+     <!-- Modal Edit Cabecera Presupuesto-->
+    <div class="modal fade" id="modal-update-presupuesto" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-pencil-square-o"></i> Modificar Presupuesto</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- Modal Form -->
+                    <form class="form-horizontal" name="update-budget" method="post" action="{{ urlFor('update-budget') }}" data-toggle="validator">
+                        <input type="hidden" id="idpresupuesto" name="id" value="{{ budget.idpresupuesto }}" required />
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Fecha</label>
+                            <div class="col-sm-10">
+                                <input type="date" name="input-date" class="form-control" autocomplete="off"  value="{{ budget.fecha }}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Cliente</label>
+                            <div class="col-sm-3">
+                                <select class="form-control custom-select" name="select-noun">
+                                    <option value="Señor: " selected>Señor</option>
+                                    <option value="Señora: ">Señora</option>
+                                    <option value="Señorita: ">Señorita</option>
+                                    <option value="Señores: ">Señores</option>
+                                    <option value="Señoras: ">Señoras</option>
+                                    <option value="Ing.: ">Ing.</option>
+                                    <option value="Lic.: ">Lic.</option>
+                                    <option value="Dr.: ">Dr.</option>
+                                    <option value="Dra.: ">Dra.</option>
+                                    <option value="Abg.: ">Abg.</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-7">
+                                <input type="text" name="input-customer" autocomplete="off" class="form-control" value="{{ budget.cliente }}" required/>
+                            </div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Descripción</label>
+                            <div class="col-sm-10">
+                              <textarea class="form-control rounded-0" id="text-area-description" name="text-area-description" rows="3">{{ budget.descripcion }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="text-right"><input id="guardar" type="submit" value="ACTUALIZAR" class="btn btn-info"/></div>
+                    </form>
+                    <!-- End Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/delete.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/moneda.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(16)').addClass('active');
+        $('input[name="cantidad"]').focus();
+    </script>
+{% endblock %}

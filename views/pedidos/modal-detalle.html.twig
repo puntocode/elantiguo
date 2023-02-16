@@ -1,0 +1,309 @@
+<!-- Modal Update Senha-->
+<div class="modal fade modal-info" id="update-senha" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-dollar"></i> Cargar Seña</h4>
+            </div>
+            <div class="modal-body">
+                <h4 id="title-producto"></h4>
+                <form class="form-vertical" method="post" action="{{ urlFor('update-senha') }}" data-toggle="validator">
+                    <input type="hidden" name="idpedido" value="{{ pedido.idpedidos }}" />
+                    <div class="form-group">
+                        <input type="text" name="sign" autocomplete="off" class="form-control moneda" title="Seña" value="{{ pedido.senha|number_format(0, ',', '.') }}" required/>
+                    </div>
+                    <div class="text-right"><input id="guardar" type="submit" value="CARGAR" class="btn btn-info"/></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Update OBS-->
+<div class="modal fade modal-primary" id="modal-obs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><i class="fa fa-file"></i> Cargar Observacion</h4>
+            </div>
+            <div class="modal-body">
+                <h4 id="title-producto"></h4>
+                <form class="form-vertical" method="post" action="{{ urlFor('update-obs') }}" data-toggle="validator">
+                    <input type="hidden" name="idpedido" value="{{ pedido.idpedidos }}" />
+                    <div class="form-group">
+                        <input type="text" name="obs" autocomplete="off" class="form-control" title="observacion" value="{{ pedido.obs }}" required/>
+                    </div>
+                    <div class="text-right"><input type="submit" value="GUARDAR" class="btn btn-primary"/></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Update Cabecera Pedido-->
+<div class="modal fade" id="modal-up-order" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="fa fa-file-archive-o"></i> EDITAR PEDIDO</h4>
+            </div>
+            <form class="form-horizontal" name="insert-customer" method="post" action="{{ urlFor('update-pedido') }}" data-toggle="validator">
+                <input type="hidden" name="idpedido" value="{{ pedido.idpedidos }}" />
+                <input type="hidden" name="idcliente" value="{{ pedido.idcliente }}" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Cliente</label>
+                        <div class="col-sm-10">
+                            <select id="sl-customer" name="customer" class="form-control" style="width: 100%" required>
+                                {% for entity in clientes %}
+                                    <option value="{{ entity.idcliente }}">{{ entity.cliente | upper }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Fecha</label>
+                        <div class="col-sm-10">
+                            <input type="date" name="date" class="form-control" value="{{ pedido.fecha }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Nro. Presupuesto</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="number-order" class="form-control upper" value="{{ pedido.nro_presupuesto }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Nro. Factura</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="number-facture" class="form-control upper" value="{{ pedido.factura }}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> ACTUALIZAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cancelar Pedido -->
+<div class="modal fade modal-danger" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="myModalLabel">Desea cancelar este pedido?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                <a class="btn btn-danger btn-ok">SI</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cargar Productos-->
+<div class="modal fade" id="modal-productos" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fa fa-shopping-cart"></i> CARGAR PRODUCTOS</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0">
+                <form class="form-horizontal" name="insert-product" method="post" action="{{ urlFor('insert-detail-order') }}" role="form">
+                    <input type="hidden" name="idpedido" value="{{ pedido.idpedidos }}" />
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label>Producto</label>
+                            <input list="list-productos" name="producto" class="form-control" required title="Detalle del Producto">
+                            <datalist id="list-productos">
+                                {% for entity in productos %}
+                                    <option value="{{ entity.producto|lower }}"></option>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label>Cantidad</label>
+                            <input type="number" name="cantidad" class="form-control" required>
+                        </div>
+                        <div class="col-sm-8">
+                            <label>Costo</label>
+                            <input type="text" name="costo" class="form-control moneda" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="submit" class="btn btn-info pull-right" value="INSERTAR" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer alert-footer">
+                <div class="col-xs-9">
+                    <h5 class="color-success text-left alert-modal"></h5>
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-success color-success text-right end" style="background-color: #fff"> TERMINAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cargar Cobros-->
+<div class="modal fade" id="modal-pay" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fa fa-credit-card"></i> CARGAR COBROS</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0">
+                <form class="form-horizontal" name="insert-pay" method="post" action="{{ urlFor('insert-pay') }}" role="form">
+                    <input type="hidden" name="iddeuda" value="0" />
+                    <input type="hidden" name="idpedido" value="{{ pedido.idpedidos }}" />
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <label>Fecha</label>
+                            <input type="date" name="fecha"  class="form-control" value="{{ now|date('Y-m-d') }}" title="Fecha de Pago" required />
+                        </div>
+                        <div class="col-sm-7">
+                            <label>Monto</label>
+                            <input type="text" class="form-control moneda" name="cobro" autocomplete="off" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label>Observacion</label>
+                            <input type="text" class="form-control" name="obs" autocomplete="off" placeholder="DATO DEL COBRO" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="submit" class="btn btn-info pull-right" value="INSERTAR" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer alert-footer">
+                <div class="col-xs-6">
+                    <h5 class="color-success text-left alert-modal"></h5>
+                </div>
+                <div class="col-xs-3">
+                    <a id="print-receipt" href="" data-toggle="modal" data-target="#modal-print-receipt" class="btn btn-success" style="display: none"><i class="fa fa-print"></i> Imprimir Recibo</a>
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-success color-success text-right end" style="background-color: #fff"> TERMINAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Imprimir Recibo-->
+<div class="modal fade" id="modal-print-receipt" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="fa fa-file-text-o"></i> IMPRIMIR RECIBO</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0">
+                <form class="form-horizontal" name="form-print-receipt" method="post" action="{{ urlFor('insert-recibo-ajax') }}" role="form">
+                    <input type="hidden" name="idcliente" value="{{ pedido.idcliente }}" />
+                    <input type="hidden" name="estado" value="R" required />
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label>Nro. Recibo</label>
+                            <input type="text" name="nrofactura"  class="form-control" placeholder="00000" autocomplete="off"  required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Fecha</label>
+                            <input id="input-date" type="text" name="fecha"  class="form-control" value="{{ now|date('Y-m-d') }}"   readonly required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label>Cliente</label>
+                            <input type="text" name="cliente"  class="form-control" value="{{ pedido.cliente }}" disabled required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label>Concepto</label>
+                            <input id="input-concept" type="text" class="form-control" name="producto"  required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Monto</label>
+                            <input id="input-cost" type="text" class="form-control" name="costo"  readonly required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="submit" class="btn btn-primary pull-right color-primary" style="background-color: #fff" value="IMPRIMIR" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cargar Deuda-->
+<div class="modal fade modal-danger" id="modal-debt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fa fa-calculator"></i> CARGAR DEUDAS</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0">
+                <form class="form-horizontal" name="form-debt" method="post" action="{{ urlFor('insert-debt') }}" role="form">
+                    <input type="hidden" name="idpedido-deuda" value="{{ pedido.idpedidos }}" />
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <label>Fecha a pagar</label>
+                            <input type="date" name="fecha-deuda"  class="form-control" value="{{ now|date('Y-m-d') }}" title="Fecha de Pago" required />
+                        </div>
+                        <div class="col-sm-7">
+                            <label>Monto a pagar</label>
+                            <input type="text" class="form-control moneda" name="monto-deuda" autocomplete="off" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label>Detalle de Deuda</label>
+                            <input type="text" class="form-control" name="obs-deuda" autocomplete="off" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="submit" class="btn btn-danger pull-right" value="INSERTAR" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer alert-footer">
+                <div class="col-xs-9">
+                    <h5 class="color-success text-left alert-modal"></h5>
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-success color-success text-right end" style="background-color: #fff"> TERMINAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alertas -->
+{% if flash['mensaje-senha'] %}
+    <div class="bb-alert alert alert-success animated fadeOut">
+        <span>{{ flash['mensaje-senha'] }}</span> <a id="receipt-senha" href="" data-toggle="modal" data-target="#modal-print-receipt" class="btn btn-success"><i class="fa fa-print"></i> Imprimir Recibo</a>
+    </div>
+{% endif %}

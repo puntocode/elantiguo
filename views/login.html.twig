@@ -1,0 +1,63 @@
+{% set dir =  baseUrl ~ "/views" %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8mb4" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0">
+        <link rel="shortcut icon" type="image/png" href="{{ dir }}/assets/images/favicon.png"/>
+        <title>Login</title>
+        <!-- CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{ dir }}/assets/css/estilo.min.css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    </head>
+    <body class="login-body">
+
+    <div class="container login-container">
+        <div class="login-panel panel panel-default plain animated bounceIn">
+            <!-- Start .panel -->
+            <div class="panel-heading">
+                <h4 class="panel-title text-center">
+                    <img id="logo" src="{{ dir }}/assets/images/logo.png" alt="logo">
+                </h4>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal mt0" method="post" action="" id="login-form" role="form">
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <div class="left-inner-addon">
+                                <i class="fa fa-envelope"></i>
+                                <input type="text" name="user" class="form-control" value="" placeholder="Usuario">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <div class="left-inner-addon">
+                                <i class="fa fa-key"></i>
+                                <input type="password" name="password" class="form-control" value="" placeholder="Password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <button class="btn btn-default btn-block" type="submit">INGRESAR</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="msg-red">{{ flash['error'] }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="footer">
+            <p class="text-center">&copy;2017 El Antiguo admin. Todos los derechos reservados!!!</p>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{{ dir }}/assets/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/bootstrap.min.js"></script>
+    {% block javascripts %}{% endblock %}
+    </body>
+</html>

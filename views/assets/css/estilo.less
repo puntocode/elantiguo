@@ -1,0 +1,252 @@
+@import url(https://fonts.googleapis.com/css?family=Courgette);
+
+@colorbase: #001432;
+//@colorcomp: #4F84B5;
+@colorcomp: #008bd6;
+@footbg:#3E3D3D;
+@fuente-form:"Helvetica Neue", Helvetica, Arial, sans-serif;
+@bordeprueba: 1px solid red;
+@fuente-login:'RobotoDraft', 'Roboto', sans-serif;
+@gris-login: #e5e5e5;
+@font-courgette : 'Courgette', cursive;
+@color-red: #FA2A00;
+
+
+::selection{background-color: @colorbase;color: #fff;}
+
+//Custom Scroll
+::-webkit-scrollbar {width: 8px;}
+::-webkit-scrollbar-track {}
+::-webkit-scrollbar-thumb {background-color: #CCCCCC;outline: none;}
+//End custom scroll
+
+.login-body{background-color:@colorbase; font-family: @fuente-login;
+  .login-container{width: 400px;
+    .panel{border: 1px solid @gris-login; margin-top: 20%;
+      img{width: 170px;margin-top: 25px;}
+      .panel-heading{background-color: #fff;border-bottom: 0;}
+      .panel-body{padding:20px 30px 30px 30px;
+        .left-inner-addon{position: relative;
+          i{position: absolute; padding: 10px; pointer-events: none; color: @colorbase}
+          input{padding-left: 35px;}
+          input:focus{border-color:#bdbdbd; box-shadow: 0px 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(255,100,255,0.5);}
+        }
+        .btn-default{padding:10px;background-color: @colorbase;color: #fff;margin-top:5px; margin-bottom: 15px; border-bottom-color:@colorcomp }
+        .input-icon{padding-left: 35px;padding-right: 12px;border-top-left-radius: 3px; border-bottom-left-radius: 3px;}
+      }
+    }
+  }
+  .footer{color: #fff}
+}
+
+.active2{a{color: @colorcomp !important;}}
+.btn-nuevo{padding-top: 25px; display: inline-block}
+.bb-alert {position: fixed;bottom: 15%;right: 0;margin-bottom: 0;font-size: 1.2em;padding: 1em 1.3em; z-index: 4000; -webkit-animation-delay: 3s; -moz-animation-delay: 3s;}
+.upper { text-transform: uppercase; }
+.side-menu-container{
+  a{ .icon{font-size: 17px !important;} }
+}
+.color-danger{color: #E63A3A !important;};
+.color-success{color: #5CB85C !important;};
+.color-primary{color: @colorbase !important;};
+.color-comp{color: @colorcomp !important;};
+.color-gray{color: #c9c9c9 !important;};
+.color-warning{color: #FABE28 !important;};
+.btn-outline-primary{color: @colorbase !important;border:1px solid @colorbase;border-radius: 50%;margin-right: 5px;padding: 6px 10px !important;};
+
+
+/*----------------------------Table Filter----------------------------------*/
+.table{
+  td{i{font-size: 20px;color: @colorcomp}}
+  .acciones{
+    ul{padding: 0; li{list-style: none;display: inline-block;} }
+    .delete{color:@color-red}
+  }
+}
+.filterable {margin-top: 2px;
+  .panel-heading .pull-right { margin-top: -20px;}
+  .filters{
+    .th-title{font-size: 14px;padding-bottom: 12px;}
+    input{height: 29px;}
+    input[disabled] {width:100px;background-color: transparent;border: none;cursor: auto;box-shadow: none;padding-top: 12px;}
+    input[disabled]::-webkit-input-placeholder {color: #333;}
+    input[disabled]::-moz-placeholder {color: #333;}
+    input[disabled]:-ms-input-placeholder {color: #333;}
+  }
+}
+/*----------------------------Table Sorter----------------------------------*/
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header {
+  background-image: url("../images/tablesorter/up-down.png");
+  padding: 0px 20px 7px 7px;
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+.tablesorter-default thead .headerSortUp,
+.tablesorter-default thead .tablesorter-headerAsc,
+.tablesorter-default thead .tablesorter-headerSortUp {
+  background-image: url("../images/tablesorter/up.png");
+}
+
+
+.tablesorter-default thead .headerSortDown,
+.tablesorter-default thead .tablesorter-headerDesc,
+.tablesorter-default thead .tablesorter-headerSortDown {
+  background-image: url("../images/tablesorter/down.png");
+}
+
+/*----------------------------Dashboard---------------------------------*/
+.dropdown{
+  .line-bottom{border-bottom: 1px solid #e1e6ef}
+  .noti-icon-badge {display: inline-block;position: absolute;top: 11px;right: 8px;}
+  .title-noti{background-color: #f9f9fa; color:#9faecb;padding: 2px 5px;text-align: center}
+  .mail{background-color: white; padding: 5px !important; color: @color-red !important;}
+  .monto{color: #a94442 !important;}
+  .no-deuda{padding: 2px 8px;}
+}
+
+.dash-form{
+  .card-header{background-color: @colorbase; color:#fff;
+    .titulo{padding: 12px; font-size: 18px;}
+  }
+}
+.modal-dashboard{
+  .modal-header{h3{margin-top: 10px; margin-bottom: 5px;}}
+  .modal-body{
+    .line-dark{border-bottom: 2px solid #5e5e5e !important;}
+    .row{margin-left: 5px;margin-right:5px; border-bottom: 2px solid #F7F7F7;
+      [class*="col-"]{margin-bottom: 5px !important;}
+    }
+  }
+}
+
+.dataTables_filter input {height: 18px;}
+.btn-pdf{background: #fff !important; border: 1px solid @colorbase !important; color: @colorbase !important; }
+
+.right-inner-addon {position: relative;
+  input {padding-right: 35px;}
+  i {position: absolute;right: 0px;padding: 10px 10px;pointer-events: none;  }
+}
+
+.inventario-new-stock{.btn{height: 28px;margin: 0 auto;float: right;padding: 2px 10px;}}
+
+
+/*-----Pagina Cargar Factura----*/
+.facture{
+  .form-inline{input{width: 97% !important;}
+    .btn-add-stock{height: 33px;}
+    .btn-insert-stock{margin-top: 0}
+  }
+  .title-facute{padding-top:14px;padding-left: 30px;}
+  .col-md-12{margin-bottom: 0;}
+  table{margin-top: 25px;
+    .table-cabecera{background-color: @colorcomp; color:#fff}
+    .delete{color: @color-red}
+  }
+  .btn-back{padding-top: 15px;}
+  .card-footer{.btn{margin-bottom: 15px;margin-right: 25px;}}
+}
+
+.egress{
+  .card-footer{padding: 15px;border-top: 1px solid #CCCCCC;
+    h4{color:@color-red;}
+  }
+  .img-container{width: 100px;
+    img{width: 100%}
+  }
+}
+
+
+/*-----Pagina Dashboard----*/
+.dashboard{
+  .card-title{
+    .title{font-size: 17px !important;}
+  }
+  .table-total{
+    i{color:#9FAFD1;font-size: 22px;margin-top: 20px;}
+  }
+}
+
+/*-----Pagina DetalleMaquina----*/
+.upload-machine{
+  .card.blue{padding-bottom: 10px;}
+  .card {border: 1px solid #a1aec7;
+    .card-header{padding-top: 7px;padding-bottom: 7px;border-bottom: 1px solid #a1aec7;
+      .total {color: @color-red }
+       img{width: 100%;}
+    }
+    .card-body{
+      .table-responsive{margin-top: 20px;
+        .fa-times{color: @color-red}
+      }
+      input{width: 100%}
+      .btn-info{margin: 0 auto; width: 80%}
+    }
+  }
+}
+
+
+
+/*-----Pagina DetallePedido----*/
+.detail-order{
+  .card.navy{background-color:@colorbase;color:#fff;border: transparent;
+    h2{margin-bottom: 20px; font-size: 25px}
+    .presupuesto{background-color:@colorcomp;padding: 10px; margin: 10px auto}
+    .nro-factura{border: 1px solid #ffffff;font-size: 15px;padding: 14px; margin: 10px auto}
+  }
+
+  .widget {background-color: #fff;padding: 20px;
+    .data-info {display: inline-block;
+      .total-number{font-size: 23px;}
+    }
+    .icon {display: inline-block;float: right;font-size: 45px;line-height: 54px;}
+  }
+  .card {border: 1px solid #a1aec7;
+    .card-header{padding-top: 7px;padding-bottom: 7px;border-bottom: 1px solid #a1aec7;
+      img{width: 100%;}
+      .btn{background-color: #fff}
+    }
+    .card-body{padding: 2px 25px;
+      .table-responsive{margin-top: 20px;
+        .fa-times{color: @color-red}
+        .fa-money{color: #5CB85C}
+      }
+      input{width: 100%}
+      .btn-info{margin: 0 auto; width: 80%; background-color: #fff;border-color: @colorbase;color: @colorbase}
+      .entrega{border-top: 1px solid #e0e0e0;margin: 0 0 20px 0;text-align: right;
+        .btn-success{background-color: #fff;color:#5CB85C;border-color: #5CB85C}
+      }
+    }
+    .card-footer{padding: 0 25px;
+      hr{margin-top: 0; margin-bottom: 15px;}
+      .total {color: @color-red }
+    }
+  }
+}
+.alert-footer{
+  [class*="col-"]{padding-left: 0 !important; padding-right: 0;}
+}
+
+
+.card-calendar{padding-top: 20px;
+  .fc-toolbar {
+    text-transform: uppercase;
+  }
+}
+
+
+
+
+
+
+/*-----Pagina upload Ingress----*/
+.cabecera-ingress{
+  .add-customer{margin-top: 10px;float: left}
+}
+#btn-add-customer-recibo{padding: 2px 5px; margin:23px auto; border-radius:3px }
+@media print {
+  a[href]:after {
+    content: none !important;
+  }
+}

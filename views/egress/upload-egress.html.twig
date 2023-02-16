@@ -1,0 +1,188 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Nueva Factura{% endblock %}
+{% block stylesheets %}
+    <link href="{{ dir }}/assets/css/select2.min.css" rel="stylesheet"/>
+{% endblock %}
+
+
+{% block titleDash %}Nueva Factura{% endblock %}
+{% block infoDash %}Cargar las facturas de gastos{% endblock %}
+
+{% block nuevo %}
+    {% include '/include/alert.html.twig' %}
+{% endblock %}
+
+{% block row %}
+    <div class="row facture">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6">
+                        <h4>FACTURA</h4>
+                    </div>
+                    
+                    <div class="col-md-6 text-right btn-facture">
+                        <button type="button" 
+                            id="btn-add-provider" 
+                            data-toggle="modal" 
+                            data-target="#modal-add-provider" 
+                            class="btn btn-primary btn-add-stock">
+                                <i class="fa fa-truck"></i>
+                                Agregar Proveedor
+                        </button>
+
+                        <button type="button" 
+                            id="btn-add-stock" 
+                            data-toggle="modal" 
+                            data-target="#modal-add-stock" 
+                            class="btn btn-primary btn-add-stock">
+                                <i class="fa fa-cart-plus"></i>
+                                Agregar Producto        
+                        </button>
+
+
+                        <button type="button" 
+                            class="btn btn-success" 
+                            id="save">
+                                <i class="fa fa-file-text-o"></i>
+                                Guardar Factura
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <form action="">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="fecha">Fecha</label>
+                                    <input type="date" class="form-control" id="fecha" name="fecha" value="{{  now|date('Y-m-d')  }}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fecha">Proveedor</label>
+                                    <select id="sl-provider" class="form-control" name="provider" style="width: 100%">
+                                        {% for entity in provider %}
+                                            <option value="{{ entity.idproveedor }}">{{ entity.proveedor|upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nro-factura">Nro. de Factura</label>
+                                    <input type="text" class="form-control" id="nro-factura" name="nro_factura" placeholder="000-000-0000000">
+                                </div>
+                            </div>
+                            
+                            {# hr ------------------------------------------------- #}
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="cantidad">Cantidad</label>
+                                    <input type="number" class="form-control" id="cantidad" name="cantidad">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="producto">Producto</label>
+                                    <input list="list-stock" id="producto" class="form-control" autocomplete="off">
+                                    <datalist id="list-stock">
+                                        {% for entity in stock %}
+                                            <option value="{{ entity.stock }}"></option>
+                                        {% endfor %}
+                                    </datalist>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="cantidad">Impuesto</label>
+                                    <select id="impuesto" class="form-control">
+                                        <option value="11">IVA 10%</option>
+                                        <option value="21">IVA 5%</option>
+                                        <option value="0">EXCENTO</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="costo">Costo Unitario</label>
+                                    <input type="text" id="costo" name="costo" class="moneda form-control" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                  
+
+                    <div class="row">
+                        <div class="col-md-12">
+                             <div class="table-responsive">
+                                <table id="tabla-factura" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">CANTIDAD</th>
+                                            <th>PRODUCTO</th>
+                                            <th class="text-right">PRECIO</th>
+                                            <th class="text-right">TOTAL</th>
+                                            <th width="30"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body" class="table-detalle">
+                                        <tr>
+                                            <td class="text-right" colspan="3">Descuento Gs.</td>
+                                            <td class="text-right" id="td-descuento">0</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn-outline-primary" data-toggle="modal" data-target="#modalDescuento"> 
+                                                    <i class="fa fa-edit"></i> 
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" colspan="3">SUBTOTAL Gs.</td>
+                                            <td class="text-right" id="subtotal">0</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" colspan="3">IMPUESTO Gs.</td>
+                                            <td class="text-right" id="impTotal">0</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="text-danger">
+                                            <td class="text-right" colspan="3">TOTAL Gs.</td>
+                                            <td class="text-right" id="total">0</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {# 
+            <div class="btn-back">
+                <a class="btn btn-xs btn-primary" href="{{ urlFor('egress') }}"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> REGRESAR</a>
+            </div> #}
+        </div>
+    </div>
+
+    {% include '/include/add-provider.html.twig' %}
+    {% include '/include/descuento.html.twig' %}
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/select2.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/factura.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js" integrity="sha512-NCiXRSV460cHD9ClGDrTbTaw0muWUBf/zB/yLzJavRsPNUl9ODkUVmUHsZtKu17XknhsGlmyVoJxLg/ZQQEeGA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}

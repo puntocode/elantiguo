@@ -1,0 +1,198 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Proceso{% endblock %}
+{% block stylesheets %}<link href="{{ dir }}/assets/css/select2.min.css" rel="stylesheet"/>{% endblock %}
+
+
+{% block titleDash %}Procesamiento de Materiales{% endblock %}
+{% block infoDash %}Materiales en bruto para ser procesados en la empresa{% endblock %}
+
+{% block nuevo %}
+    <button class="btn btn-primary" data-toggle="modal" data-target="#new-prod">NUEVA SALIDA</button>
+    <!-- Modal Insertar Usuarios-->
+    <div class="modal fade" id="new-prod" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-cogs"></i> REGISTRAR SALIDA</h4>
+                </div>
+                <form class="form-horizontal"  method="post" action="{{ urlFor('insert-bruto') }}" data-toggle="validator">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Fecha</label>
+                            <div class="col-sm-10">
+                                <input type="date" name="fecha"  class="form-control" value="{{ now|date('Y-m-d') }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Producto</label>
+                            <div class="col-sm-10">
+                                <select id="sl-stock" class="form-control" name="stock" style="width: 100%">
+                                    {% for entity in stock %}
+                                        <option value="{{ entity.idstock }}">{{ entity.producto | upper }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Cantidad</label>
+                            <div class="col-sm-10">
+                                <input type="number" step="0.01"  name="cantidad"  class="form-control" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Motivo</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="motivo"  class="form-control" placeholder="Para que?"  required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Empleado</label>
+                            <div class="col-sm-10">
+                                <select id="sl-empleado" class="form-control" name="empleado" >
+                                    {% for entity in empleado %}
+                                        <option value="{{ entity.idempleado }}">{{ entity.nombre | upper }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" name="user" value="{{ user['iduser'] }}" />
+                        <input type="hidden" name="movimiento" value="S" />
+                        <input type="hidden" name="pendiente" value="P" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-wd btn-danger"> SALIDA</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include '/include/alert.html.twig' %}
+
+{% endblock %}
+
+{% block tabla %}
+    <div class="card filterable">
+        <div class="card-header">
+            <div class="card-title">
+                <h4 class="title">Tabla de Productos Pendientes</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>PRODUCTO</th>
+                        <th>CANTIDAD</th>
+                        <th>Uni/Med</th>
+                        <th>MOTIVO</th>
+                        <th>EMPLEADO</th>
+                        <th>
+                            <center>RECIBIDO</center>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in pendiente %}
+                        <tr>
+                            <td>{{ dato.fecha | date('d-M-Y') }}</td>
+                            <td>{{ dato.producto | upper }}</td>
+                            <td id="cantidad">{{ dato.cantidad }} </td>
+                            <td>{{ dato.unidad | upper }} </td>
+                            <td>{{ dato.motivo | upper }} </td>
+                            <td>{{ dato.nombre | upper }} </td>
+                            <td>
+                                <center>
+                                    {#<a title="editar" href=""><i class="fa fa-pencil-square-o"></i></a>#}
+                                    <a class="confirmar" title="confirmar" href="#" data-href="" data-toggle="modal" data-target="#entrada">
+                                        <input type="hidden" name="id" value="{{ dato.idinventario }}">
+                                        <i class="fa fa-check-square-o" style="color: #5cb85c"></i>
+                                    </a>
+                                </center>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Confirmar Recibido-->
+    <div class="modal fade" id="entrada" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-cogs"></i> REGISTRAR ENTRADA</h4>
+                </div>
+                <form class="form-horizontal"  method="post" action="{{ urlFor('insert-bruto') }}" data-toggle="validator">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Fecha</label>
+                            <div class="col-sm-10">
+                                <input type="date" name="fecha"  class="form-control" value="{{ now|date('Y-m-d') }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Producto</label>
+                            <div class="col-sm-10">
+                                <select id="sl-stock-ent" class="form-control" name="stock" style="width: 100%">
+                                    {% for entity in materiales %}
+                                        <option value="{{ entity.idstock }}">{{ entity.producto | upper }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Cantidad</label>
+                            <div class="col-sm-10">
+                                <input type="number" step="0.01"  name="cantidad" value="1"  class="form-control" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Empleado</label>
+                            <div class="col-sm-10">
+                                <select id="sl-empleado" class="form-control" name="empleado" >
+                                    {% for entity in empleado %}
+                                        <option value="{{ entity.idempleado }}">{{ entity.nombre | upper }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" name="motivo" value="entrada">
+                        <input type="hidden" name="user" value="{{ user['iduser'] }}" />
+                        <input type="hidden" name="idinventario" />
+                        <input type="hidden" name="movimiento" value="E" />
+                        <input type="hidden" name="cant-anterior" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-wd btn-success"> ENTRADA</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/select2.min.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(4)').addClass('active');
+        $('.side-menu li:eq(6)').addClass('active2');
+        $("#sl-stock-ent").select2({
+            dropdownParent: $('#entrada')
+        });
+        $('.confirmar').on('click', function(){
+            var id = $(this).find("input[name='id']").val();
+            $("input[name='idinventario']").val(id);
+            var cantidad = $(this).parents("tr").find("#cantidad").html();
+            $("input[name='cant-anterior']").val(cantidad);
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,167 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Ingresos{% endblock %}
+
+{% block titleDash %}Ingresos{% endblock %}
+{% block infoDash %}Facturas de ingresos del mes{% endblock %}
+
+{% block nuevo %}
+    <a class="btn btn-primary" href="{{ urlFor('ingress-facture') }}"><i class="fa fa-files-o"></i> NUEVA FACTURA</a>
+    <button class="btn btn-info" data-toggle="modal" data-target="#mensual"><i class="fa fa-search"></i> BUSQUEDA MENSUAL</button>
+    <div class="modal fade" id="mensual" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-search"></i> BUSQUEDA MENSUAL</h4>
+                </div>
+                <form class="form-horizontal" name="search-ingress" method="post" action="{{ urlFor('busqueda-ingress') }}" data-toggle="validator">
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Mes</label>
+                            <div class="col-sm-10">
+                                <select id="select-month" name="mes" class="form-control"  required>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Año</label>
+                            <div class="col-sm-10">
+                                <select id="select-year"  name="anho"  class="form-control"  required>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2018">2018</option>
+                                </select>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit"  class="btn btn-wd btn-info" value="BUSCAR" />
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block tabla %}
+    <div class="egress card filterable">
+        <div class="card-header filterable">
+            <div class="card-title">
+                <h4 class="title"><i class="fa fa-file-text"></i> FACTURAS DE INGRESOS: {{ fechas.mes }} / {{ fechas.anho }}</h4>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="fa fa-filter"></span> Filtro</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="filters">
+                        <th>TIPO</th>
+                        <th>FECHA</th>
+                        <th><input type="text" placeholder="NRO FACTURA" disabled></th>
+                        <th><input type="text" placeholder="CLIENTE" disabled></th>
+                        <th>TOTAL</th>
+                        <th>IVA</th>
+                        <th class="text-center">ACCIONES</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in ingress %}
+                        <tr>
+                            <td><i class="fa
+                                {% if dato.tipo_ingress=='D' %}
+                                    fa-file-text-o color-primary
+                                {% elseif dato.tipo_ingress=='A' %}
+                                    fa-ban color-danger
+                                {% else %}
+                                    fa-money color-success
+                                {% endif %}
+                            "></i></td>
+                            <td class="fecha-factura">{{ dato.fecha|date("d-m-Y") }}</td>
+                            <td class="nro-factura">{{ dato.nro_factura }}</td>
+                            <td class="provider">{{ dato.cliente|upper }}</td>
+                            <td>{{ dato.total|number_format(0, ',', '.') }} </td>
+                            <td>{{ (dato.total/11)|number_format(0, ',', '.') }} </td>
+                            <td class="text-center acciones">
+                                <ul>
+                                    <li><a href="{{ urlFor('detalle-factura-activo',{id:dato.idactivo}) }}" ><i class="fa fa-pencil-square-o"></i></a></li>
+                                    <li><a href="#" data-href="{{ urlFor('null-activo', {id:dato.idactivo,pagina:"ingress"}) }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-times delete"></i></a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="col-sm-4">
+                <h4><i class="fa fa-arrow-up"></i>TOTAL FACTURAS Gs.: {{total.total|number_format(0, ',', '.') }}</h4>
+            </div>
+            <div class="col-sm-2">
+                <h4 class="color-success"><i class="fa fa-money"></i> TOTAL Gs.: {{total.money|number_format(0, ',', '.') }}</h4>
+            </div>
+            <div class="col-sm-2 blue">
+                <h4 class="color-primary"><i class="fa fa-file-text-o"></i> TOTAL Gs.: {{ total.document|number_format(0, ',', '.') }}</h4>
+            </div>
+            <div class="col-sm-2">
+                <h4 class="color-danger"><i class="fa fa-ban"></i> TOTAL Gs.: {{ total.null|number_format(0, ',', '.') }}</h4>
+            </div>
+            <div class="col-sm-2">
+                <h4 class="text-right">TOTAL IVA Gs.: {{ (total.total/11)|number_format(0, ',', '.') }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Anular Factura-->
+    <div class="modal fade modal-danger" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="myModalLabel">Desea anular esta Factura?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                    <a class="btn btn-danger btn-ok">SI</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Alertas -->
+    {% if flash['mensaje'] %}
+        <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+            <span>{{ flash['mensaje'] }}</span>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/delete.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(12)').addClass('active');
+        $('.side-menu li:eq(13)').addClass('active2');
+    </script>
+{% endblock %}

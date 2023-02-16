@@ -1,0 +1,104 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Ingresos{% endblock %}
+{% block stylesheets %}
+    <link href="{{ dir }}/assets/css/select2.min.css" rel="stylesheet"/>
+    <link href="{{ dir }}/assets/css/bootstrap-switch.min.css" rel="stylesheet"/>
+{% endblock %}
+
+
+{% block titleDash %}Cargar Recibo{% endblock %}
+{% block infoDash %}Cargar los datos del Recbio{% endblock %}
+
+{% block row %}
+    <div class="row detail-order">
+        <!-- Alertas -->
+        {% if flash['mensaje'] %}
+            <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+                <span>{{ flash['mensaje'] }}</span>
+            </div>
+        {% endif %}
+
+        <div class="col-sm-12">
+            <div class="card">
+                <form class="form-inline" name="detalle-activo" role="form" method="post" action="{{ urlFor('insert-recibo') }}">
+                    <input type="hidden" name="estado" value="R" required />
+                    <div class="card-header">
+                        <div class="title-facute col-xs-11">
+                            <h4>RECIBO DE DINERO</h4>
+                        </div>
+                        <div class="col-xs-1">
+                            <input id="switch" type="checkbox" name="switch" checked />
+                        </div>
+                    </div>
+                    <div class="card-body" style="margin-bottom: 40px">
+                        <div class="col-xs-12">
+                            <div class="form-group col-xs-3">
+                                <label for="">Fecha</label>
+                                <input id="fecha_factura" type="date" name="fecha"  class="form-control"  value="{{ now|date('Y-m-d') }}" title="Fecha de Recibo" required />
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <div class="col-xs-10">
+                                    <label for="">Cliente</label>
+                                    <select id="sl-customer" class="form-control" name="customer" style="width: 100%" title="Cliente">
+                                        {% for entity in client %}
+                                            <option value="{{ entity.idcliente }}">{{ entity.cliente|upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="add-customer">
+                                    <button type="button" id="btn-add-customer-recibo" data-toggle="modal" data-target="#modal-add-customer" class="btn btn-primary" style="background-color:#001432"><i class="fa fa-user-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <label for="">Nro. Recibo</label>
+                                <input id="nro_factura" type="text" name="nrofactura"  class="form-control" placeholder="00000" autocomplete="off"  required>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="form-group col-xs-8">
+                                <label for="">Concepto</label>
+                                <input type="text" name="producto" class="form-control" title="Concepto"  required>
+                            </div>
+                            <div class="form-group col-xs-4">
+                                <label for="">Monto</label>
+                                <input type="text" class="form-control moneda" name="costo" autocomplete="off"  required />
+                            </div>
+                        </div>
+                        <div class="col-xs-12" style="margin: 18px auto">
+                            <div class="form-group col-xs-2 pull-right" >
+                                <input id="btn-recibo" type="submit" style="width: 100%" class="btn btn-info" value="INSERTAR" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <a class="btn btn-primary pull-left" href="{{ urlFor('ingress_recibo') }}" style="background-color: #fff; color:#001432;"><i class="fa fa-arrow-circle-left"></i> INICIO</a>
+        </div>
+    </div>
+
+    {% include '/include/add-customer.html.twig' %}
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/select2.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/bootstrap-switch.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/moneda.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/ingress/facture.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(12)').addClass('active');
+        $('.side-menu li:eq(14)').addClass('active2');
+        $('#nro_factura').keypress(function(e) {
+            if(e.which == 13) {
+                $('input[name="producto"]').focus();
+            }
+        });
+    </script>
+{% endblock %}

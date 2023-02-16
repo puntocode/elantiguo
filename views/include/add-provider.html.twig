@@ -1,0 +1,127 @@
+<div class="modal fade" id="modal-add-provider" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="fa fa-truck"></i> AGREGAR PROVEEDOR</h4>
+            </div>
+            <form class="form-horizontal" name="add-provider" method="post" action="{{ urlFor('insert-provider-ajax') }}" data-toggle="validator">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Proveedor</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="provider" class="form-control upper" placeholder="" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">RUC</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="ruc" class="form-control" placeholder="000000-0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Direccion</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="address" class="form-control" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Ciudad</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="city" class="form-control upper" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Contacto</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="contact" class="form-control upper" placeholder="Nombre del Contacto" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Telefono</label>
+                        <div class="col-sm-10">
+                            <input type="text"  name="phone" class="form-control" autocomplete="off" placeholder="021123658">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Celular</label>
+                        <div class="col-sm-10">
+                            <input type="text"  name="cellphone" class="form-control" autocomplete="off" placeholder="09XX123456">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" name="mail" class="form-control" autocomplete="off" placeholder="elantiguo@hotmail.com">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> INSERTAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-stock" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="fa fa-cog"></i> AGREGAR PRODUCTO</h4>
+            </div>
+            <form class="form-horizontal" name="add-stock" method="post" action="{{ urlFor('insert-stock-ajax') }}" data-toggle="validator">
+                <div class="modal-body">
+                    {#<div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Codigo</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="codigo" class="form-control" placeholder="000-000-000" autocomplete="off" required>
+                        </div>
+                    </div>#}
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Producto</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="producto" class="form-control" placeholder="" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Ubicacion</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="ubicacion" class="form-control upper" placeholder="X.0.0" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Uni/Med</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="unidad" class="form-control upper" placeholder="U/M" autocomplete="off" required>
+                        </div>
+                    </div>
+                    {#<div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Cantidad</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" name="cantidad" class="form-control" autocomplete="off" placeholder="0" required>
+                        </div>
+                    </div>#}
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Stock Minimo</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" name="minimo" class="form-control" autocomplete="off" placeholder="0" required>
+                        </div>
+                    </div>
+                    <input type="hidden" name="costo" class="form-control" value="0" />
+                    {#<div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">Costo</label>
+                        <div class="col-sm-10">
+                            <input type="number" name="costo" class="form-control" placeholder="0" autocomplete="off" required>
+                        </div>
+                    </div>#}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> INSERTAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

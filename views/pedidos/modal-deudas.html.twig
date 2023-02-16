@@ -1,0 +1,55 @@
+<!-- Alertas -->
+{% if flash['mensaje'] %}
+    <div class="bb-alert alert {{ flash['content'] }} animated fadeOut">
+        <span>{{ flash['mensaje'] }}</span>
+    </div>
+{% endif %}
+
+<!-- Modal Cargar Cobros-->
+<div class="modal fade" id="modal-pay" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fa fa-credit-card"></i> CARGAR COBROS</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0">
+                <form class="form-horizontal" name="insert-pay" method="post" action="{{ urlFor('insert-pay') }}" role="form">
+                    <input type="hidden" name="iddeuda" value="0" />
+                    <input type="hidden" name="idpedido" value="{{ pedido.idpedidos }}" />
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <label>Fecha</label>
+                            <input type="date" name="fecha"  class="form-control" value="{{ now|date('Y-m-d') }}" title="Fecha de Pago" required />
+                        </div>
+                        <div class="col-sm-7">
+                            <label>Monto</label>
+                            <input type="text" class="form-control moneda" name="cobro" autocomplete="off" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label>Observacion</label>
+                            <input type="text" class="form-control" name="obs" autocomplete="off" placeholder="DATO DEL COBRO" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="submit" class="btn btn-info pull-right" value="INSERTAR" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer alert-footer">
+                <div class="col-xs-6">
+                    <h5 class="color-success text-left alert-modal"></h5>
+                </div>
+                <div class="col-xs-3">
+                    <a id="print-receipt" href="" data-toggle="modal" data-target="#modal-print-receipt" class="btn btn-success" style="display: none"><i class="fa fa-print"></i> Imprimir Recibo</a>
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-success color-success text-right end" style="background-color: #fff"> TERMINAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

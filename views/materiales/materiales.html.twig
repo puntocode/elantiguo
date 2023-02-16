@@ -1,0 +1,143 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Materiales{% endblock %}
+
+{% block titleDash %}Materiales{% endblock %}
+{% block infoDash %}Materiales utilizados dentro de la empresa{% endblock %}
+
+{% block nuevo %}
+    <button class="btn btn-primary" data-toggle="modal" data-target="#new-prod">NUEVO PRODUCTO</button>
+    <!-- Modal Insertar Usuarios-->
+    <div class="modal fade" id="new-prod" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="cerrar_modal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="fa fa-cog"></i> AGREGAR PRODUCTO</h4>
+                </div>
+                <form class="form-horizontal" name="insert-user" method="post" action="{{ urlFor('insert-stock') }}" data-toggle="validator">
+                    <div class="modal-body">
+                        {#<div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Codigo</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="codigo" class="form-control" placeholder="000-000-000" autocomplete="off" required>
+                            </div>
+                        </div>#}
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Producto</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="producto" class="form-control" placeholder="" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Ubicacion</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="ubicacion" class="form-control upper" placeholder="X.0.0" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Uni/Med</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="unidad" class="form-control upper" placeholder="U/M" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Cantidad</label>
+                            <div class="col-sm-10">
+                                <input type="number" step="0.01" name="cantidad" class="form-control" autocomplete="off" placeholder="0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Stock Minimo</label>
+                            <div class="col-sm-10">
+                                <input type="number" step="0.01" name="minimo" class="form-control" autocomplete="off" placeholder="0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">Costo</label>
+                            <div class="col-sm-10">
+                                <input type="number" name="costo" class="form-control" placeholder="0" autocomplete="off" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-wd btn-info"><span class="btn-label"></span> INSERTAR</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% include '/include/alert.html.twig' %}
+
+{% endblock %}
+
+
+{% block tabla %}
+    <div class="card filterable">
+        <div class="card-header">
+            <div class="card-title col-md-6 col-lg-9 col-sm-6">
+                <h4 class="title"><i class="fa fa-cog"></i> TABLA DE MATERIALES</h4>
+            </div>
+            <div class="card-title col-md-6 col-lg-3 col-sm-6">
+                <form class="form-horizontal mt0" method="post" action="{{ urlFor('search-stock') }}" role="search">
+                    <div class="pull-right">
+                        <div class="right-inner-addon">
+                            <i class="fa fa-search"></i>
+                            <input type="text" name="buscar" class="form-control" value="" placeholder="Buscar..">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Ubicacion</th>
+                        <th>Stock</th>
+                        <th>Uni/Med</th>
+                        <th>Minimo</th>
+                        <th>Costo</th>
+                        <th><center>ACCIONES</center></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for dato in stock %}
+                        <tr>
+                            <td>{{ dato.producto | upper }}</td>
+                            <td>{{ dato.ubicacion }} </td>
+                            <td>{{ dato.cantidad }} </td>
+                            <td>{{ dato.unidad | upper }} </td>
+                            <td>{{ dato.stock_min }} </td>
+                            <td>{{ dato.costo |number_format }} </td>
+                            <td class="acciones"><center>
+                                    <ul>
+                                        <li>
+                                            <a href="{{ urlFor('up-stock',{id:dato.idstock}) }}"><i class="fa fa-pencil-square-o"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#" data-href="{{ urlFor('delete-stock', {'id':dato.idstock, 'material':dato.producto, 'iduser':user.iduser}) }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o delete"></i></a>
+                                        </li>
+                                    </ul></center>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/delete.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(1)').addClass('active');
+        $('.side-menu li:eq(2)').addClass('active2');
+    </script>
+{% endblock %}

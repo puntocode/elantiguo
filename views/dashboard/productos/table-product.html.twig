@@ -1,0 +1,67 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block titleDash %}Productos{% endblock %}
+{% block infoDash %}Tabla de los productos mas vendidos durante el mes{% endblock %}
+
+{% block tabla %}
+    <div class="egress card filterable">
+        <div class="card-header filterable">
+            <div class="card-title">
+                <h4 class="title"><i class="fa fa-user"></i> TABLA DE PRODUCTOS MAS VENDIDOS: {{ fecha.mes }} / {{ fecha.anho }}</h4>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="fa fa-filter"></span> Filtro</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover tablesorter">
+                    <thead>
+                    <tr class="filters">
+                        <th>#</th>
+                        <th><input type="text" class="form-control" placeholder="PRODUCTO" style="padding-left: 0; width: 100%" disabled></th>
+                        <th>CANTIDAD VENDIDA</th>
+                        <th>PRECIO UNITARIO</th>
+                        <th>TOTAL VENTA</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dato in table %}
+                        {% set counter=counter + 1 %}
+                        <tr>
+                            <td style="color: #9eaabd">{{ counter }}</td>
+                            <td>{{ dato.producto | upper }}</td>
+                            <td>{{ dato.cantidad }}</td>
+                            <td>{{ dato.costo|number_format }}</td>
+                            <td>{{ dato.ingreso|number_format }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" style="padding-left: 0; padding-top: 15px">
+        <a class="btn btn-primary pull-left" href="{{ urlFor('dashboard', {'mes':fecha.mes, 'anho':fecha.anho}) }}" style="background-color: #fff; color:#001432;"><i class="fa fa-arrow-circle-left"></i> INICIO</a>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ dir }}/assets/js/filtertable.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/lib/table/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="{{ dir }}/assets/js/lib/table/tablesorter-addparser.js"></script>
+    <script type="text/javascript">
+        $('.side-menu li:eq(0)').addClass('active');
+        $(".table").tablesorter({
+            headers: {
+                3: {//zero-based column index
+                    sorter:'thousands'
+                },
+                4: {//zero-based column index
+                    sorter:'thousands'
+                }
+            }
+        });
+    </script>
+{% endblock %}

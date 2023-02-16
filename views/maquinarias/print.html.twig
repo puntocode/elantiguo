@@ -1,0 +1,114 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Producto{% endblock %}
+
+{% block row %}
+    <div class="row upload-machine">
+
+        <!-- Card Maquina Nombre -->
+        <div class="col-sm-12">
+            <div class="card dark">
+                <div class="card-header">
+                    <div class="title col-xs-3">
+                        <img src="{{ dir }}/assets/images/productos/{{ img.img_big }}" alt="IMG MAQUINA">
+                    </div>
+                    <div class="col-xs-9">
+                        <h3>{{ sum_detalle.producto|upper }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Materiales -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h4><i class="fa fa-cogs"></i> MATERIALES</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h4 class="text-right total">TOTAL: {{ sum_detalle.total|number_format(0, ',', '.') }} </h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {#TABLA DE MATERIALES#}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr class="filters">
+                                    <th>CANTIDAD</th>
+                                    <th>PRODUCTO</th>
+                                    <th>COSTO</th>
+                                    <th>TOTAL</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for dato in materiales %}
+                                    <tr>
+                                        <td>{{ dato.cantidad }}</td>
+                                        <td>{{ dato.material|upper }}</td>
+                                        <td>{{ dato.costo|number_format(0, ',', '.') }}</td>
+                                        <td>{{ dato.total|number_format(0, ',', '.') }} </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Mano de Obra -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title-facute col-md-6 col-lg-6 col-sm-6">
+                        <h4><i class="fa fa-sign-language"></i> MANO DE OBRA</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-6">
+                        <h4 class="text-right total" >TOTAL: {{ sum_mdo.total|number_format(0, ',', '.') }} </h4>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    {#TABLA DE MDO#}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr class="filters">
+                                    <th>MANO DE OBRA</th>
+                                    <th>COSTO</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for dato in mano_obra %}
+                                    <tr>
+                                        <td>{{ dato.mano_obra|upper }}</td>
+                                        <td>{{ dato.costo|number_format(0, ',', '.') }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="card dark">
+                <div class="card-header">
+                    <h3 class="text-right"> TOTAL: {{ (sum_detalle.total+sum_mdo.total)|number_format(0, ',', '.') }} Gs.</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.side-menu li:eq(18)').addClass('active');
+        $('.cabecera').remove();
+        window.print();
+    </script>
+{% endblock %}
